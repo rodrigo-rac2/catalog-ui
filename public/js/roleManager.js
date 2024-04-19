@@ -1,3 +1,4 @@
+
 export class RoleManager {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;

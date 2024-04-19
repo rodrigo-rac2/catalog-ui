@@ -1,20 +1,28 @@
 import { BookManager } from './bookManager.js';
 import { ParticipantManager } from './participantManager.js';
 import { RoleManager } from './roleManager.js';
-import { BookParticipantManager } from './bookPbookidbookidarticipantManager.js';
-// import dotenv from 'dotenv'
-// dotenv.config()
+import { BookParticipantManager } from './bookParticipantManager.js';
 
-// const apiBaseUrl = process.env.API_BASE_URL || 'http://127.0.0.1:5100/api';
-
+// Base URL of the API
 const apiBaseUrl = 'http://127.0.0.1:5100/api';
 
+// Managers
 const bookManager = new BookManager(apiBaseUrl);
 const participantManager = new ParticipantManager(apiBaseUrl);
 const roleManager = new RoleManager(apiBaseUrl);
 const bookParticipantManager = new BookParticipantManager(apiBaseUrl);
 
+function toggleForm(containerId) {
+    const container = document.getElementById(containerId);
+    container.style.display = container.style.display === 'none' ? 'block' : 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('addBookBtn').addEventListener('click', () => toggleForm('book-form-container'));
+    document.getElementById('addParticipantBtn').addEventListener('click', () => toggleForm('participant-form-container'));
+    document.getElementById('addRoleBtn').addEventListener('click', () => toggleForm('role-form-container'));
+    document.getElementById('addBookParticipantBtn').addEventListener('click', () => toggleForm('book-participant-form-container'));
+
     document.getElementById('loadBooks').addEventListener('click', async () => {
         const books = await bookManager.fetchBooks();
         displayBooks(books);
@@ -27,89 +35,100 @@ document.addEventListener('DOMContentLoaded', () => {
         const roles = await roleManager.fetchRoles();
         displayRoles(roles);
     });
+
     document.getElementById('loadBookParticipants').addEventListener('click', async () => {
-        bookid = document.getElementById('bookid').value;
-        const bookParticipants = await bookParticipantManager.fetchBookParticipants(bookid);
-        displayBookParticipants(bookParticipants);
+        const bookId = document.getElementById('load-book-participant-id').value;
+        if (!bookId) {
+            console.error('No book ID provided');
+            return; // Exit if no book ID is provided
+        }
+        const bookParticipants = await bookParticipantManager.fetchBookParticipants(bookId);
+        displayBookParticipants(bookParticipants, bookId);
     });
 
-    // Handle the forms for adding new entries using forms' submit events
-    document.getElementById('book-form').addEventListener('submit', handleBookSubmit);
-    document.getElementById('participant-form').addEventListener('submit', handleParticipantSubmit);
-    document.getElementById('role-form').addEventListener('submit', handleRoleSubmit);
-    document.getElementById('book-participant-form').addEventListener('submit', handleBookParticipantSubmit);
+    // Form submission event listeners
+    document.getElementById('book-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const book = {
+            title: document.getElementById('book-title').value,
+            isbn: document.getElementById('book-isbn').value,
+            description: document.getElementById('book-description').value,
+            edition: document.getElementById('book-edition').value,
+            publisher: document.getElementById('book-publisher').value,
+            publicationPlace: document.getElementById('book-publication-place').value,
+            publicationDate: document.getElementById('book-publication-date').value,
+            numberOfPages: document.getElementById('book-pages').value
+        };
+        await bookManager.addBook(book);
+        toggleForm('book-form-container');  // Optionally close the form
+    });
+
+    document.getElementById('participant-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const participant = {
+            name: document.getElementById('participant-name').value
+        };
+        await participantManager.addParticipant(participant);
+        toggleForm('participant-form-container');  // Optionally close the form
+    });
+
+    document.getElementById('role-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const role = {
+            description: document.getElementById('role-description').value
+        };
+        await roleManager.addRole(role);
+        toggleForm('role-form-container');  // Optionally close the form
+    });
+
+    document.getElementById('book-participant-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const bookParticipant = {
+            bookId: document.getElementById('bp-book-id').value,
+            participantId: document.getElementById('bp-participant-id').value,
+            roleId: document.getElementById('bp-role-id').value
+        };
+        await bookParticipantManager.addBookParticipant(bookParticipant);
+        toggleForm('book-participant-form-container');  // Optionally close the form
+    });
 });
 
 function displayBooks(books) {
-    const booksList = document.getElementById('books-list');
-    booksList.innerHTML = '';
+    const list = document.getElementById('books-list');
+    list.innerHTML = '';
     books.forEach(book => {
-        const li = document.createElement('li');
-        li.textContent = `${book.title} - ISBN: ${book.isbn}`;
-        booksList.appendChild(li);
+        const item = document.createElement('li');
+        item.textContent = `${book.title} - ISBN: ${book.isbn}`;
+        list.appendChild(item);
     });
 }
 
 function displayParticipants(participants) {
-    const participantsList = document.getElementById('participants-list');
-    participantsList.innerHTML = '';
+    const list = document.getElementById('participants-list');
+    list.innerHTML = '';
     participants.forEach(participant => {
-        const li = document.createElement('li');
-        li.textContent = participant.name;
-        participantsList.appendChild(li);
+        const item = document.createElement('li');
+        item.textContent = participant.name;
+        list.appendChild(item);
     });
 }
 
 function displayRoles(roles) {
-    const rolesList = document.getElementById('roles-list');
-    rolesList.innerHTML = '';
+    const list = document.getElementById('roles-list');
+    list.innerHTML = '';
     roles.forEach(role => {
-        const li = document.createElement('li');
-        li.textContent = role.description;
-        rolesList.appendChild(li);
+        const item = document.createElement('li');
+        item.textContent = role.description;
+        list.appendChild(item);
     });
 }
 
-function displayBookParticipants(bookParticipants) {
-    const bookParticipantsList = document.getElementById('book-participants-list');
-    bookParticipantsList.innerHTML = '';
+function displayBookParticipants(bookParticipants, bookId) {
+    const list = document.getElementById('book-participants-list');
+    list.innerHTML = '';
     bookParticipants.forEach(bp => {
-        const li = document.createElement('li');
-        li.textContent = `Book ID: ${bp.bookId}, Participant ID: ${bp.participantId}, Role ID: ${bp.roleId}`;
-        bookParticipantsList.appendChild(li);
+        const item = document.createElement('li');
+        item.textContent = `Book ID: ${bookId}, Participant: ${bp.participant.name} (ID: ${bp.participant.participantid}), Role: ${bp.role.description} (ID: ${bp.role.roleid})`;
+        list.appendChild(item);
     });
-}
-
-async function handleBookSubmit(event) {
-    event.preventDefault();
-    const title = document.getElementById('book-title').value;
-    const isbn = document.getElementById('book-isbn').value;
-    const description = document.getElementById('book-description').value;
-    // Collect other form fields similarly
-    const bookData = { title, isbn, description }; // Add other fields accordingly
-    await bookManager.addBook(bookData);
-    await bookManager.fetchBooks(); // Refresh the list
-}
-
-async function handleParticipantSubmit(event) {
-    event.preventDefault();
-    const name = document.getElementById('participant-name').value;
-    await participantManager.addParticipant({ name });
-    await participantManager.fetchParticipants(); // Refresh the list
-}
-
-async function handleRoleSubmit(event) {
-    event.preventDefault();
-    const description = document.getElementById('role-description').value;
-    await roleManager.addRole({ description });
-    await roleManager.fetchRoles(); // Refresh the list
-}
-
-async function handleBookParticipantSubmit(event) {
-    event.preventDefault();
-    const bookId = document.getElementById('bp-book-id').value;
-    const participantId = document.getElementById('bp-participant-id').value;
-    const roleId = document.getElementById('bp-role-id').value;
-    await bookParticipantManager.addBookParticipant({ bookId, participantId, roleId });
-    await bookParticipantManager.fetchBookParticipants(); // Refresh the list
 }

@@ -1,64 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Catalog API Client</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
     <h1>Book Catalog</h1>
-    
-    <section id="books">
-        <h2>Books</h2>
-        <button id="loadBooks">Load Books</button>
-        <div id="books-list"></div>
-        <form id="book-form">
-            <input type="text" id="book-title" placeholder="Title" required>
-            <input type="text" id="book-isbn" placeholder="ISBN" required>
-            <textarea id="book-description" placeholder="Description"></textarea>
-            <input type="text" id="book-edition" placeholder="Edition Number">
-            <input type="text" id="book-publisher" placeholder="Publisher">
-            <input type="text" id="book-publication-place" placeholder="Publication Place">
-            <input type="text" id="book-publication-date" placeholder="Publication Date">
-            <input type="text" id="book-pages" placeholder="Number of Pages">
-            <button type="submit">Add Book</button>
-        </form>
-    </section>
 
-    <section id="participants">
-        <h2>Participants</h2>
-        <button id="loadParticipants">Load Participants</button>
-        <div id="participants-list"></div>
-        <form id="participant-form">
-            <input type="text" id="participant-name" placeholder="Participant Name" required>
-            <button type="submit">Add Participant</button>
+    <section id="books">
+      <h2>Books</h2>
+      <button id="loadBooks">Load Books</button>
+      <button id="addBookBtn">Add New Book</button>
+      <div id="book-form-container" style="display: none">
+        <form id="book-form">
+          <label for="book-title">Title:</label>
+          <input type="text" id="book-title" placeholder="Title" required />
+          <label for="book-isbn">ISBN:</label>
+          <input type="text" id="book-isbn" placeholder="ISBN" required />
+          <label for="book-description">Description:</label>
+          <textarea id="book-description" placeholder="Description"></textarea>
+          <label for="book-edition">Edition Number:</label>
+          <input type="text" id="book-edition" placeholder="Edition Number" />
+          <label for="book-publisher">Publisher:</label>
+          <input type="text" id="book-publisher" placeholder="Publisher" />
+          <label for="book-publication-place">Publication Place:</label>
+          <input
+            type="text"
+            id="book-publication-place"
+            placeholder="Publication Place"
+          />
+          <label for="book-publication-date">Publication Date:</label>
+          <input
+            type="text"
+            id="book-publication-date"
+            placeholder="Publication Date"
+          />
+          <label for="book-pages">Number of Pages:</label>
+          <input type="text" id="book-pages" placeholder="Number of Pages" />
+          <button type="submit">Submit</button>
         </form>
+      </div>
+      <div id="books-list"></div>
+    </section>
+    <section id="participants">
+      <h2>Participants</h2>
+      <button id="loadParticipants">Load Participants</button>
+      <button id="addParticipantBtn">Add Participant</button>
+      <div id="participants-list"></div>
+      <div id="participant-form-container" style="display: none">
+        <form id="participant-form">
+          <input
+            type="text"
+            id="participant-name"
+            placeholder="Participant Name"
+            required
+          />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
     </section>
 
     <section id="roles">
-        <h2>Roles</h2>
-        <button id="loadRoles">Load Roles</button>
-        <div id="roles-list"></div>
+      <h2>Roles</h2>
+      <button id="loadRoles">Load Roles</button>
+      <button id="addRoleBtn">Add Role</button>
+      <div id="roles-list"></div>
+      <div id="role-form-container" style="display: none">
         <form id="role-form">
-            <input type="text" id="role-description" placeholder="Role Description" required>
-            <button type="submit">Add Role</button>
+          <input
+            type="text"
+            id="role-description"
+            placeholder="Role Description"
+            required
+          />
+          <button type="submit">Submit</button>
         </form>
+      </div>
     </section>
 
     <section id="book-participants">
-        <h2>Book Participants</h2>
-        <input type="number" id="bookid" placeholder="Book ID" required>
-        <button id="loadBookParticipants">Load Book Participants</button>
-        <div id="book-participants-list"></div>
+      <h2>Book Participants</h2>
+      <input
+        type="number"
+        id="load-book-participant-id"
+        placeholder="Enter Book ID to Load Participants"
+        required
+      />
+      <button id="loadBookParticipants">Load Book Participants</button>
+      <div id="book-participants-list"></div>
+      <button id="addBookParticipantBtn">Add Participant to Book</button>
+      <div id="book-participant-form-container" style="display: none">
         <form id="book-participant-form">
-            <input type="number" id="bp-book-id" placeholder="Book ID" required>
-            <input type="number" id="bp-participant-id" placeholder="Participant ID" required>
-            <input type="number" id="bp-role-id" placeholder="Role ID" required>
-            <button type="submit">Add Participant to Book</button>
+          <label for="bp-book-id">Book ID:</label>
+          <input type="number" id="bp-book-id" placeholder="Book ID" required />
+
+          <label for="bp-participant-id">Participant ID:</label>
+          <input
+            type="number"
+            id="bp-participant-id"
+            placeholder="Participant ID"
+            required
+          />
+
+          <label for="bp-role-id">Role ID:</label>
+          <input type="number" id="bp-role-id" placeholder="Role ID" required />
+
+          <button type="submit">Submit</button>
         </form>
+      </div>
     </section>
 
     <script type="module" src="js/main.js"></script>
-</body>
+  </body>
 </html>

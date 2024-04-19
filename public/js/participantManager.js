@@ -1,3 +1,5 @@
+// participantManager.js
+
 export class ParticipantManager {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;

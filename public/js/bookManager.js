@@ -1,3 +1,5 @@
+// bookmanager.js
+
 export class BookManager {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
