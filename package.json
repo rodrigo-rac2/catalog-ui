@@ -1,0 +1,14 @@
+{
+    "name": "catalog-ui",
+    "version": "1.0.0",
+    "description": "Frontend for the Catalog API",
+    "type": "module",
+    "main": "main.mjs",
+    "scripts": {
+        "start": "node main.mjs"
+    },
+    "dependencies": {
+        "dotenv": "^16.0.0",
+        "express": "^4.17.1"
+    }
+}
