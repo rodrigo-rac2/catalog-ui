@@ -1,4 +1,6 @@
-export class BookManager {
+// bookService.js
+
+export class BookService {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
     }
@@ -6,7 +8,9 @@ export class BookManager {
     async fetchBooks() {
         try {
             const response = await fetch(`${this.apiBaseUrl}/books/`);
-            if (!response.ok) throw new Error('Failed to fetch books');
+            if (!response.ok) {
+                throw new Error('Failed to fetch books');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error fetching books:', error);
@@ -21,7 +25,9 @@ export class BookManager {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(bookData)
             });
-            if (!response.ok) throw new Error('Failed to add book');
+            if (!response.ok) {
+                throw new Error('Failed to add book');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error adding book:', error);
