@@ -1,4 +1,5 @@
-import { displayRoles, toggleForm } from "../uiHelpers.js";
+import { toggleForm } from "../helpers/common.js";
+import { displayRoles } from "../helpers/roleHelpers.js";
 import { RoleService } from "../../api-handlers/roleService.js";
 
 export function setupRoleEventHandlers(apiBaseUrl) {
@@ -9,6 +10,7 @@ export function setupRoleEventHandlers(apiBaseUrl) {
 
   document.getElementById("loadRoles")
     .addEventListener("click", async () => {
+      toggleForm("roles-list");
       displayRoles(await roleService.fetchRoles());
     });
 

@@ -1,4 +1,5 @@
-import { displayBooks, toggleForm } from "../uiHelpers.js";
+import { toggleForm } from "../helpers/common.js";
+import { displayBooks } from "../helpers/bookHelpers.js";
 import { BookService } from "../../api-handlers/bookService.js";
 
 export function setupBookEventHandlers(apiBaseUrl) {
@@ -9,7 +10,8 @@ export function setupBookEventHandlers(apiBaseUrl) {
 
   document.getElementById("loadBooks")
     .addEventListener("click", async () => {
-      displayBooks(await bookService.fetchBooks());
+        toggleForm("books-list");
+        displayBooks(await bookService.fetchBooks());
     });
 
   document.getElementById("book-form")

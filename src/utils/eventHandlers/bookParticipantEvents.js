@@ -1,4 +1,5 @@
-import { displayBookParticipants, toggleForm } from "../uiHelpers.js";
+import { toggleForm } from "../helpers/common.js";
+import { displayBookParticipants } from "../helpers/bookParticipantHelpers.js";
 import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
 
 export function setupBookParticipantEventHandlers(apiBaseUrl) {

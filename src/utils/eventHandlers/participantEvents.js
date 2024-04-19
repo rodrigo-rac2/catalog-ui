@@ -1,4 +1,5 @@
-import { displayParticipants, toggleForm } from "../uiHelpers.js";
+import { toggleForm } from "../helpers/common.js";
+import { displayParticipants } from "../helpers/participantHelpers.js";
 import { ParticipantService } from "../../api-handlers/participantService.js";
 
 export function setupParticipantEventHandlers(apiBaseUrl) {
@@ -9,7 +10,8 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
 
   document.getElementById("loadParticipants")
     .addEventListener("click", async () => {
-      displayParticipants(await participantService.fetchParticipants());
+        toggleForm("participants-list");
+        displayParticipants(await participantService.fetchParticipants());
     });
 
   document.getElementById("participant-form")
