@@ -7,3 +7,5 @@ services:
     volumes:
       - ./src:/usr/src/app/src
       - ./public:/usr/src/app/public
+    env_file:
+      - ./.env

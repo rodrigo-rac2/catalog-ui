@@ -1,6 +1,6 @@
-// participantManager.js
+// participantService.js
 
-export class ParticipantManager {
+export class ParticipantService {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
     }
@@ -8,7 +8,9 @@ export class ParticipantManager {
     async fetchParticipants() {
         try {
             const response = await fetch(`${this.apiBaseUrl}/participants/`);
-            if (!response.ok) throw new Error('Failed to fetch participants');
+            if (!response.ok) {
+                throw new Error('Failed to fetch participants');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error fetching participants:', error);
@@ -23,7 +25,9 @@ export class ParticipantManager {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(participantData)
             });
-            if (!response.ok) throw new Error('Failed to add participant');
+            if (!response.ok) {
+                throw new Error('Failed to add participant');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error adding participant:', error);

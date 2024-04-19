@@ -1,5 +1,6 @@
+// roleService.js
 
-export class RoleManager {
+export class RoleService {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
     }
@@ -7,7 +8,9 @@ export class RoleManager {
     async fetchRoles() {
         try {
             const response = await fetch(`${this.apiBaseUrl}/roles/`);
-            if (!response.ok) throw new Error('Failed to fetch roles');
+            if (!response.ok) {
+                throw new Error('Failed to fetch roles');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error fetching roles:', error);
@@ -22,7 +25,9 @@ export class RoleManager {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(roleData)
             });
-            if (!response.ok) throw new Error('Failed to add role');
+            if (!response.ok) {
+                throw new Error('Failed to add role');
+            }
             return await response.json();
         } catch (error) {
             console.error('Error adding role:', error);

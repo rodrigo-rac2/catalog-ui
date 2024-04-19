@@ -1,6 +1,6 @@
-// bookparticipantmanager.js
+// bookParticipantService.js
 
-export class BookParticipantManager {
+export class BookParticipantService {
     constructor(apiBaseUrl) {
         this.apiBaseUrl = apiBaseUrl;
     }

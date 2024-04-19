@@ -50,3 +50,14 @@ form input, form textarea {
 form button {
     margin-top: 10px;
 }
+
+.role-item {
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    list-style-type: none; // Remove bullets from list items
+}
+
+.role-item button {
+    margin-right: 5px;
+}

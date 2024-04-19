@@ -4,6 +4,14 @@ FROM node:16
 # Set the working directory
 WORKDIR /usr/src/app
 
+# Arguments that can be passed during the build
+ARG BASE_URL
+ARG PORT
+
+# Set environment variables
+ENV BASE_URL=${BASE_URL}
+ENV PORT=${PORT}
+
 # Copy package.json and package-lock.json (if available)
 COPY package*.json ./
 
@@ -15,7 +23,7 @@ COPY src/ ./src/
 COPY public/ ./public/
 
 # Inform Docker that the container is listening on the specified port at runtime.
-EXPOSE 3000
+EXPOSE ${PORT}
 
 # Run the specified command within the container.
 CMD ["node", "src/server.js"]

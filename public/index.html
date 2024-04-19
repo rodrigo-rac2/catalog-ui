@@ -48,7 +48,6 @@
       <h2>Participants</h2>
       <button id="loadParticipants">Load Participants</button>
       <button id="addParticipantBtn">Add Participant</button>
-      <div id="participants-list"></div>
       <div id="participant-form-container" style="display: none">
         <form id="participant-form">
           <input
@@ -60,13 +59,14 @@
           <button type="submit">Submit</button>
         </form>
       </div>
+      <div id="participants-list"></div>
     </section>
 
     <section id="roles">
       <h2>Roles</h2>
       <button id="loadRoles">Load Roles</button>
       <button id="addRoleBtn">Add Role</button>
-      <div id="roles-list"></div>
+      <ul id="roles-list"></ul> 
       <div id="role-form-container" style="display: none">
         <form id="role-form">
           <input
@@ -78,6 +78,8 @@
           <button type="submit">Submit</button>
         </form>
       </div>
+      <div id="roles-list"></div>
+      <div id="role-details"></div>
     </section>
 
     <section id="book-participants">
@@ -89,7 +91,6 @@
         required
       />
       <button id="loadBookParticipants">Load Book Participants</button>
-      <div id="book-participants-list"></div>
       <button id="addBookParticipantBtn">Add Participant to Book</button>
       <div id="book-participant-form-container" style="display: none">
         <form id="book-participant-form">
@@ -110,8 +111,9 @@
           <button type="submit">Submit</button>
         </form>
       </div>
+      <div id="book-participants-list"></div>
     </section>
 
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
