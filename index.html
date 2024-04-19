@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Catalog API Client</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <h1>Book Catalog</h1>
+    
+    <section id="books">
+        <h2>Books</h2>
+        <button onclick="fetchBooks()">Load Books</button>
+        <ul id="books-list"></ul>
+    </section>
+
+    <section id="participants">
+        <h2>Participants</h2>
+        <button onclick="fetchParticipants()">Load Participants</button>
+        <ul id="participants-list"></ul>
+    </section>
+
+    <section id="roles">
+        <h2>Roles</h2>
+        <button onclick="fetchRoles()">Load Roles</button>
+        <ul id="roles-list"></ul>
+    </section>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
