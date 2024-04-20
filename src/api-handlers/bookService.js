@@ -26,12 +26,13 @@ export class BookService {
                 body: JSON.stringify(bookData)
             });
             if (!response.ok) {
-                throw new Error('Failed to add book');
+                const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
+                throw new Error(`Failed to add book: ${errorResponse.message}`);
             }
             return await response.json();
         } catch (error) {
             console.error('Error adding book:', error);
-            return null;
+            throw error;  // Rethrowing the error to be handled by the caller
         }
     }
 }

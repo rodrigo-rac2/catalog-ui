@@ -26,11 +26,43 @@ This project provides a web-based user interface for interacting with the Book C
 11. [Security Best Practices](#security-best-practices)
 12. [Conclusion](#conclusion)
 
-## Features
+### Introduction
+This is the user interface for the Book Catalog project  by Rodrigo Alves Costa [mail](mailto:rodrigo.costa@gmail.com) for PUC-Rio's MVP for Sprint 1, as part of the Specialization in FullStack Development course. The Book Catalog UI is a single-page application (SPA) built using Bootstrap (HTML5 + CSS + Javascript). It provides a user-friendly interface for managing books, participants, and roles in a book catalog system. Users can add, view, update, and delete books, participants, and roles through a simple web interface.
 
-- List books, participants, and roles
-- Add new books, participants, and roles
-- Interact with the Book Catalog API using a Node.js backend
+This project needs the catalog-api to be running in order to work. The catalog-api is a RESTful API that provides endpoints for managing books, participants, and roles. The Book Catalog UI interacts with this API to provide a user-friendly interface for managing the catalog. The repository for the catalog-api can be found [here](https://github.com/rodrigo-rac2/catalog-api/)
+
+### Features
+
+#### Book Management
+- **Add New Books**: Users can add new books to the catalog, specifying details such as title, ISBN, and description.
+- **View Books**: Users can view a list of all books currently stored in the catalog.
+- **Update and Delete**: Each book can be updated or deleted directly from the list.
+
+![Book Managemnet](docs/screenshots/BookList.png)
+
+#### Participant Management
+- **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
+- **View Participants**: Displays a list of all participants.
+- **Update and Delete**: Participants can be updated or removed as required.
+
+![Participant Management](docs/screenshots/ParticipantAdded.png)
+
+#### Role Management
+- **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
+- **View Roles**: All roles can be viewed, updated, or deleted from a simple interface.
+
+![Role Management](docs/screenshots/RoleDetails.png)
+
+#### Book Participants
+- **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
+- **View Assignments**: Review all participant assignments for books within the catalog.
+
+![Book Participant Management](docs/screenshots/BookParticipantPreadd.png)
+
+#### Dynamic Configuration
+- **API Integration**: The system dynamically fetches and updates its configuration from a central API, ensuring all components are always in sync.
+
+![Screenshot placeholder for Dynamic Configuration](path/to/screenshot5.png)
 
 ## Prerequisites
 
@@ -46,8 +78,8 @@ Before you begin, ensure you have the following installed:
 First, clone this repository to your local machine:
 
 ```bash
-git clone https://your-repository-url
-cd your-project-folder
+git clone https://github.com/rodrigo-rac2/catalog-ui/
+cd catalog-ui
 ```
 
 ### Install Dependencies
@@ -62,10 +94,17 @@ npm install
 Create a `.env` file in the root of your project directory. This file should contain all necessary environment configurations:
 
 ```plaintext
-API_BASE_URL=http://127.0.0.1:5100/api
+# local
+BASE_URL=http://localhost
+PORT=3000
+
+# api
+API_BASE_URL=http://127.0.0.1
+API_PORT=5100
+
 ```
 
-Adjust the API_BASE_URL if your API is hosted at a different location.
+Adjust the variables depending on your local and API location/port.
 
 ### Running Locally
 
@@ -98,6 +137,8 @@ After starting the application, navigate to `http://localhost:3000` in your web 
 - **Add Participant**: Use the form to submit new participants to the catalog.
 - **Load Roles**: Click the "Load Roles" button to retrieve and display a list of roles.
 - **Add Role**: Use the form to submit new roles to the catalog.
+- **Assign Participants**: Assign participants to books by selecting a book and participant, then clicking "Assign".
+- **View Assignments**: View all participant assignments for books in the catalog.
 
 ### Searching and Filtering
 

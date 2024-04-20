@@ -26,7 +26,8 @@ export class ParticipantService {
                 body: JSON.stringify(participantData)
             });
             if (!response.ok) {
-                throw new Error('Failed to add participant');
+                const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
+                throw new Error(`Failed to add participant: ${errorResponse.message}`);
             }
             return await response.json();
         } catch (error) {
