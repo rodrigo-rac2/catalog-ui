@@ -62,8 +62,6 @@ This project needs the catalog-api to be running in order to work. The catalog-a
 #### Dynamic Configuration
 - **API Integration**: The system dynamically fetches and updates its configuration from a central API, ensuring all components are always in sync.
 
-![Screenshot placeholder for Dynamic Configuration](path/to/screenshot5.png)
-
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
