@@ -13,53 +13,60 @@
       <h2>Books</h2>
       <button id="loadBooks">Load Books</button>
       <button id="addBookBtn">Add New Book</button>
+      <ul id="books-list" style="display: none"></ul> 
       <div id="book-form-container" style="display: none">
         <form id="book-form">
           <label for="book-title">Title:</label>
-          <input type="text" id="book-title" placeholder="Title" required />
+          <input type="text" id="book-title" name="title" placeholder="Title" required />
           <label for="book-isbn">ISBN:</label>
-          <input type="text" id="book-isbn" placeholder="ISBN" required />
+          <input type="text" id="book-isbn" name="isbn" placeholder="ISBN" required />
           <label for="book-description">Description:</label>
-          <textarea id="book-description" placeholder="Description"></textarea>
+          <textarea id="book-description" name="description" placeholder="Description"></textarea>
           <label for="book-edition">Edition Number:</label>
-          <input type="text" id="book-edition" placeholder="Edition Number" />
+          <input type="text" id="book-edition" name="editionnumber" placeholder="Edition Number" />
           <label for="book-publisher">Publisher:</label>
-          <input type="text" id="book-publisher" placeholder="Publisher" />
+          <input type="text" id="book-publisher" name="publisher" placeholder="Publisher" />
           <label for="book-publication-place">Publication Place:</label>
           <input
             type="text"
             id="book-publication-place"
+            name="publicationplace"
             placeholder="Publication Place"
           />
           <label for="book-publication-date">Publication Date:</label>
           <input
             type="text"
             id="book-publication-date"
+            name="publicationdate"
             placeholder="Publication Date"
           />
           <label for="book-pages">Number of Pages:</label>
-          <input type="text" id="book-pages" placeholder="Number of Pages" />
+          <input type="text" id="book-pages" name="numberofpages" placeholder="Number of Pages" />
           <button type="submit">Submit</button>
         </form>
       </div>
-      <div id="books-list" style="display: none"></div>
+      <div id="books-status-messages"></div>
+      <div id="book-details"></div>
     </section>
     <section id="participants">
       <h2>Participants</h2>
       <button id="loadParticipants">Load Participants</button>
       <button id="addParticipantBtn">Add Participant</button>
+      <ul id="participants-list" style="display: none"></ul> 
       <div id="participant-form-container" style="display: none">
         <form id="participant-form">
           <input
             type="text"
             id="participant-name"
+            name="name"
             placeholder="Participant Name"
             required
           />
           <button type="submit">Submit</button>
         </form>
       </div>
-      <div id="participants-list" style="display: none"></div>
+      <div id="participants-status-messages"></div>
+      <div id="participant-details"></div>
     </section>
 
     <section id="roles">
@@ -72,12 +79,14 @@
           <input
             type="text"
             id="role-description"
+            name="description"
             placeholder="Role Description"
             required
           />
           <button type="submit">Submit</button>
         </form>
       </div>
+      <div id="roles-status-messages"></div>
       <div id="role-details"></div>
     </section>
 
@@ -110,6 +119,7 @@
           <button type="submit">Submit</button>
         </form>
       </div>
+      <div id="bookparticipants-status-messages"></div>
       <div id="book-participants-list"></div>
     </section>
 

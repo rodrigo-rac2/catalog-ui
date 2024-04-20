@@ -1,4 +1,4 @@
-// roleService.js
+// catalog-ui/src/api-handlers/roleService.js
 
 export class RoleService {
     constructor(apiBaseUrl) {
@@ -26,12 +26,14 @@ export class RoleService {
                 body: JSON.stringify(roleData)
             });
             if (!response.ok) {
-                throw new Error('Failed to add role');
+                const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
+                throw new Error(`Failed to add role: ${errorResponse.message}`);
             }
             return await response.json();
         } catch (error) {
             console.error('Error adding role:', error);
-            return null;
+            throw error;  // Rethrowing the error to be handled by the caller
         }
     }
+    
 }
