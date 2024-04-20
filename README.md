@@ -1,6 +1,8 @@
 # Book Catalog UI
 
-This project provides a web-based user interface for interacting with the Book Catalog API. It allows users to manage books, participants, and roles via a simple web interface.
+This is the user interface for the Book Catalog project by student Rodrigo Alves Costa [mail](mailto:rodrigo.costa@gmail.com) for PUC-Rio's MVP for Sprint 1, as part of the Specialization in FullStack Development course. The Book Catalog UI is a single-page application (SPA) built using Bootstrap (HTML5 + CSS + Javascript). It provides a user-friendly interface for managing books, participants, and roles in a book catalog system. Users can add, view, update, and delete books, participants, and roles through a simple web interface.
+
+This project needs the catalog-api to be running in order to work. The catalog-api is a RESTful API that provides endpoints for managing books, participants, and roles. The Book Catalog UI interacts with this API to provide a user-friendly interface for managing the catalog. The repository for the catalog-api can be found [here](https://github.com/rodrigo-rac2/catalog-api/)
 
 ## Table of Contents
 
@@ -27,9 +29,8 @@ This project provides a web-based user interface for interacting with the Book C
 12. [Conclusion](#conclusion)
 
 ### Introduction
-This is the user interface for the Book Catalog project  by Rodrigo Alves Costa [mail](mailto:rodrigo.costa@gmail.com) for PUC-Rio's MVP for Sprint 1, as part of the Specialization in FullStack Development course. The Book Catalog UI is a single-page application (SPA) built using Bootstrap (HTML5 + CSS + Javascript). It provides a user-friendly interface for managing books, participants, and roles in a book catalog system. Users can add, view, update, and delete books, participants, and roles through a simple web interface.
 
-This project needs the catalog-api to be running in order to work. The catalog-api is a RESTful API that provides endpoints for managing books, participants, and roles. The Book Catalog UI interacts with this API to provide a user-friendly interface for managing the catalog. The repository for the catalog-api can be found [here](https://github.com/rodrigo-rac2/catalog-api/)
+This project provides a web-based user interface for interacting with the Book Catalog API. It allows users to manage books, participants, and roles via a simple web interface.
 
 ### Features
 
