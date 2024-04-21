@@ -13,19 +13,45 @@
       <h2>Books</h2>
       <button id="loadBooks">Load Books</button>
       <button id="addBookBtn">Add New Book</button>
-      <ul id="books-list" style="display: none"></ul> 
+      <ul id="books-list" style="display: none"></ul>
       <div id="book-form-container" style="display: none">
         <form id="book-form">
           <label for="book-title">Title:</label>
-          <input type="text" id="book-title" name="title" placeholder="Title" required />
+          <input
+            type="text"
+            id="book-title"
+            name="title"
+            placeholder="Title"
+            required
+          />
           <label for="book-isbn">ISBN:</label>
-          <input type="text" id="book-isbn" name="isbn" placeholder="ISBN" required />
+          <input
+            type="text"
+            id="book-isbn"
+            name="isbn"
+            placeholder="ISBN"
+            required
+          />
           <label for="book-description">Description:</label>
-          <textarea id="book-description" name="description" placeholder="Description"></textarea>
+          <textarea
+            id="book-description"
+            name="description"
+            placeholder="Description"
+          ></textarea>
           <label for="book-edition">Edition Number:</label>
-          <input type="text" id="book-edition" name="editionnumber" placeholder="Edition Number" />
+          <input
+            type="text"
+            id="book-edition"
+            name="editionnumber"
+            placeholder="Edition Number"
+          />
           <label for="book-publisher">Publisher:</label>
-          <input type="text" id="book-publisher" name="publisher" placeholder="Publisher" />
+          <input
+            type="text"
+            id="book-publisher"
+            name="publisher"
+            placeholder="Publisher"
+          />
           <label for="book-publication-place">Publication Place:</label>
           <input
             type="text"
@@ -41,7 +67,12 @@
             placeholder="Publication Date"
           />
           <label for="book-pages">Number of Pages:</label>
-          <input type="text" id="book-pages" name="numberofpages" placeholder="Number of Pages" />
+          <input
+            type="text"
+            id="book-pages"
+            name="numberofpages"
+            placeholder="Number of Pages"
+          />
           <button type="submit">Submit</button>
         </form>
       </div>
@@ -52,7 +83,7 @@
       <h2>Participants</h2>
       <button id="loadParticipants">Load Participants</button>
       <button id="addParticipantBtn">Add Participant</button>
-      <ul id="participants-list" style="display: none"></ul> 
+      <ul id="participants-list" style="display: none"></ul>
       <div id="participant-form-container" style="display: none">
         <form id="participant-form">
           <input
@@ -69,11 +100,57 @@
       <div id="participant-details"></div>
     </section>
 
+    <section id="book-participants">
+      <h2>Book Participants</h2>
+      <input
+        type="number"
+        id="load-book-participant-id"
+        placeholder="Enter Book ID to Load Participants"
+        required
+      />
+      <button id="loadBookParticipants">Load Book Participants</button>
+      <button id="addBookParticipantBtn">Add Participant to Book</button>
+      <ul id="book-participants-list"></ul>
+      <div id="book-participants-form-container" style="display: none">
+        <form id="book-participant-form">
+          <label for="bp-book-id">Book ID:</label>
+          <input
+            type="number"
+            id="bp-book-id"
+            name="bookid"
+            placeholder="Book ID"
+            required
+          />
+
+          <label for="bp-participant-id">Participant ID:</label>
+          <input
+            type="number"
+            id="bp-participant-id"
+            name="participantid"
+            placeholder="Participant ID"
+            required
+          />
+
+          <label for="bp-role-id">Role ID:</label>
+          <input
+            type="number"
+            id="bp-role-id"
+            name="roleid"
+            placeholder="Role ID"
+            required
+          />
+
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div id="book-participants-status-messages"></div>
+    </section>
+
     <section id="roles">
       <h2>Roles</h2>
       <button id="loadRoles">Load Roles</button>
       <button id="addRoleBtn">Add Role</button>
-      <ul id="roles-list" style="display: none"></ul> 
+      <ul id="roles-list" style="display: none"></ul>
       <div id="role-form-container" style="display: none">
         <form id="role-form">
           <input
@@ -88,39 +165,6 @@
       </div>
       <div id="roles-status-messages"></div>
       <div id="role-details"></div>
-    </section>
-
-    <section id="book-participants">
-      <h2>Book Participants</h2>
-      <input
-        type="number"
-        id="load-book-participant-id"
-        placeholder="Enter Book ID to Load Participants"
-        required
-      />
-      <button id="loadBookParticipants">Load Book Participants</button>
-      <button id="addBookParticipantBtn">Add Participant to Book</button>
-      <div id="book-participant-form-container" style="display: none">
-        <form id="book-participant-form">
-          <label for="bp-book-id">Book ID:</label>
-          <input type="number" id="bp-book-id" placeholder="Book ID" required />
-
-          <label for="bp-participant-id">Participant ID:</label>
-          <input
-            type="number"
-            id="bp-participant-id"
-            placeholder="Participant ID"
-            required
-          />
-
-          <label for="bp-role-id">Role ID:</label>
-          <input type="number" id="bp-role-id" placeholder="Role ID" required />
-
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-      <div id="bookparticipants-status-messages"></div>
-      <div id="book-participants-list"></div>
     </section>
 
     <script type="module" src="/src/main.js"></script>

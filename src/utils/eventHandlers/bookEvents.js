@@ -3,7 +3,7 @@ import { displayBooks } from "../helpers/bookHelpers.js";
 import { displayStatusMessage } from "../helpers/common.js";
 import { BookService } from "../../api-handlers/bookService.js";
 
-export function setupBookEventHandlers(apiBaseUrl) {
+export async function setupBookEventHandlers(apiBaseUrl) {
   const bookService = new BookService(apiBaseUrl);
 
   document

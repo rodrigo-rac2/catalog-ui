@@ -55,19 +55,18 @@ form button {
     margin-bottom: 5px;
     padding: 5px;
     border: 1px solid #ccc;
-    list-style-type: none; // Remove bullets from list items
+    list-style-type: none; 
 }
 
 .book-item button {
     margin-right: 5px;
 }
 
-
 .role-item {
     margin-bottom: 5px;
     padding: 5px;
     border: 1px solid #ccc;
-    list-style-type: none; // Remove bullets from list items
+    list-style-type: none;
 }
 
 .role-item button {
@@ -78,9 +77,20 @@ form button {
     margin-bottom: 5px;
     padding: 5px;
     border: 1px solid #ccc;
-    list-style-type: none; // Remove bullets from list items
+    list-style-type: none; 
 }
 
 .participant-item button {
+    margin-right: 5px;
+}
+
+.book-participants-item {
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    list-style-type: none; 
+}
+
+.book-participants-item button {
     margin-right: 5px;
 }

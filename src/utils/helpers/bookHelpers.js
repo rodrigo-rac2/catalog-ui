@@ -2,8 +2,10 @@
 
 import { displayStatusMessage } from "./common.js";
 import { BookService } from "../../api-handlers/bookService.js";
+import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
 
-export function displayBooks(books, apiBaseUrl) {
+
+export async function displayBooks(books, apiBaseUrl) {
   const list = document.getElementById("books-list");
   list.innerHTML = ""; // Clear previous entries
 
@@ -12,7 +14,7 @@ export function displayBooks(books, apiBaseUrl) {
     return;
   }
   list.innerHTML = "";
-  books.forEach((book) => {
+  books.forEach(async (book) => {
     const item = document.createElement("li");
     item.classList.add("book-item");
     item.id = `book-${book.bookid}`;
@@ -22,7 +24,7 @@ export function displayBooks(books, apiBaseUrl) {
     openBtn.textContent = "Open";
     openBtn.classList.add("open-btn");
     openBtn.onclick = () => {
-      openBookDetails(book);
+      openBookDetails(book, apiBaseUrl);
     };
 
     const deleteBtn = document.createElement("button");
@@ -32,7 +34,9 @@ export function displayBooks(books, apiBaseUrl) {
 
     // Book title
     const descriptionText = document.createElement("span");
-    descriptionText.textContent = `${book.title}, ISBN: ${book.isbn} `;
+    descriptionText.textContent = `${book.title} by ${await getAuthorListText(
+      book, apiBaseUrl
+    )}, ISBN: ${book.isbn}`;
 
     // Details div that will be toggled
     const detailsDiv = document.createElement("div");
@@ -48,44 +52,73 @@ export function displayBooks(books, apiBaseUrl) {
   });
 }
 
-export function openBookDetails(book) {
+export async function openBookDetails(book, apiBaseUrl) {
   const detailsDiv = document.getElementById(`book-details-${book.bookid}`);
   const isHidden = detailsDiv.style.display === "none";
   detailsDiv.style.display = isHidden ? "block" : "none"; // Toggle display
 
   // If opening, fetch details and display
   if (isHidden) {
-    // Simulated fetch, replace with actual API call
-    detailsDiv.innerHTML = `
-              <h3>Book: ${book.title} </h3>
-              <p>ID: ${book.bookid}</p>
-              <p>Description: ${book.description}</p>
-              <p>Edition: ${book.editionnumber}</p>
-              <p>Publisher: ${book.publisher}</p>
-              <p>Date: ${book.publicationdate}</p>
-              <p>Location: ${book.publicationplace}</p>
-              <p>Pages: ${book.numberofpages}</p>
-              <p>ISBN: ${book.isbn}</p>
-          `;
+    try {
+      const fetchedBook = await new BookService(apiBaseUrl).fetchBook(book.bookid);
+      const authorListText = await getAuthorListText(fetchedBook, apiBaseUrl);
+
+      detailsDiv.innerHTML = `
+                <h3>Book: ${fetchedBook.title} </h3>
+                <p>By: ${authorListText}</p>
+                <p>ID: ${fetchedBook.bookid}</p>
+                <p>Description: ${fetchedBook.description}</p>
+                <p>Edition: ${fetchedBook.editionnumber}</p>
+                <p>Publisher: ${fetchedBook.publisher}</p>
+                <p>Date: ${fetchedBook.publicationdate}</p>
+                <p>Location: ${fetchedBook.publicationplace}</p>
+                <p>Pages: ${fetchedBook.numberofpages}</p>
+                <p>ISBN: ${fetchedBook.isbn}</p>
+            `;
+    } catch (error) {
+      console.error('Error fetching book details:', error);
+      detailsDiv.innerHTML = '<p>Error loading book details. Please try again.</p>';
+    }
   }
 }
 
-export function deleteBook(bookid, apiBaseUrl, listItemElement) {
-  fetch(`${apiBaseUrl}/books/${bookid}`, { method: "DELETE" })
-    .then((response) => {
+export async function getAuthorListText(book, apiBaseUrl) {
+  // Fetch authors asynchronously
+  const authorList = await new BookParticipantService(apiBaseUrl).fetchBookParticipantsWithRole(book.bookid, 1);
+
+  // If there's only one author, return their name directly
+  if (authorList.length === 1) {
+    return authorList[0].participant.name;
+  }
+
+  // Build a string of author names with commas and "and" before the last author
+  let authorListText = authorList.map(author => author.participant.name).join(", ");
+
+  // Replace the last comma with ", and" if there are more than one author
+  const lastCommaIndex = authorListText.lastIndexOf(",");
+  if (lastCommaIndex !== -1) {
+    authorListText = authorListText.substring(0, lastCommaIndex) + " and" + authorListText.substring(lastCommaIndex + 1);
+  }
+
+  return authorListText;
+};
+
+
+export async function deleteBook(bookid, apiBaseUrl, listItemElement) {
+    try {
+      response = await new BookService(apiBaseUrl).deleteBook(bookid);
       if (response.ok) {
         listItemElement.remove();
         displayStatusMessage("books", "Book deleted successfully", "success");
       } else {
         displayStatusMessage("books", "Failed to delete book", "error");
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error("Error deleting book:", error);
       displayStatusMessage(
         "books",
         "Error deleting book: " + error.message,
         "error"
       );
-    });
+    }
 }
