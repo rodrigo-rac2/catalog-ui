@@ -1,43 +1,91 @@
 // bookParticipantService.js
 
 export class BookParticipantService {
-    constructor(apiBaseUrl) {
-        this.apiBaseUrl = apiBaseUrl;
-    }
+  constructor(apiBaseUrl) {
+    this.apiBaseUrl = apiBaseUrl;
+  }
 
-    async fetchBookParticipants(bookId) {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/books/${bookId}/participants`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch book participants');
-            }
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error('Error fetching book participants:', error);
-            throw error;  // Rethrow to handle it further up the call stack if needed
-        }
+  async fetchBookParticipants(bookId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/participants`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch book participants: ${response.statusText}`
+        );
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching book participants:", error);
+      throw error;
     }
+  }
 
-    async addBookParticipant(participantData) {
-        try {
-            const response = await fetch(`${this.apiBaseUrl}/books/${participantData.bookId}/participants`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    participantId: participantData.participantId,
-                    roleId: participantData.roleId
-                })
-            });
-            if (!response.ok) {
-                throw new Error('Failed to add participant to book');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Error adding participant to book:', error);
-            throw error;
-        }
+  async fetchBookParticipantsWithRole(bookId, roleId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/roles/${roleId}/participants`
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch participants for book with ID: ${bookId} and role ID: ${roleId}: ${response.statusText}`
+        );
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching participants:", error);
+      throw error;
     }
+  }
+
+  async addBookParticipant(bookId, participantId, roleId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/participants`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            participant: { participantid: participantId },
+            role: { roleid: roleId },
+          }),
+        }
+      );
+      if (!response.ok) {
+        const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
+        throw new Error(
+          `Failed to add book participant: ${errorResponse.message}`
+        );
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error adding book participant:", error);
+      throw error;
+    }
+  }
+
+  async deleteBookParticipant(bookId, participantId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/participants/${participantId}`,
+        { method: "DELETE" }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to delete book participant with ID: ${participantId}: ${response.statusText}`
+        );
+      }
+      // Only parse JSON if the server actually sends back data
+      if (response.status !== 204) {
+        // 204 No Content
+        const result = await response.json();
+        return result;
+      }
+      return {}; // Return an empty object or appropriate message for no content
+    } catch (error) {
+      console.error("Error deleting book participant:", error);
+      throw error; // Rethrowing the error to be handled by the caller
+    }
+  }
 }
