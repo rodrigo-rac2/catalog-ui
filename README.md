@@ -55,10 +55,14 @@ This project provides a web-based user interface for interacting with the Book C
 ![Role Management](docs/screenshots/RoleDetails.png)
 
 #### Book Participants
-- **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
 - **View Assignments**: Review all participant assignments for books within the catalog.
+![Book Participant Management](docs/screenshots/BookParticipantList.png)
 
-![Book Participant Management](docs/screenshots/BookParticipantPreadd.png)
+- **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
+![Book Participant Management](docs/screenshots/BookParticipantPreAdd.png)
+
+- **View Updated Assignments**: After assigning participants to books, the updated assignments are displayed in the list.
+![Book Participant Management](docs/screenshots/BookParticipantAdded.png)
 
 #### Dynamic Configuration
 - **API Integration**: The system dynamically fetches and updates its configuration from a central API, ensuring all components are always in sync.
