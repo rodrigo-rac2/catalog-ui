@@ -56,10 +56,10 @@ This project provides a web-based user interface for interacting with the Book C
 
 #### Book Participants
 - **View Assignments**: Review all participant assignments for books within the catalog.
-![Book Participant Management](docs/screenshots/BookParticipantList.png)
+![Book Participant Management](docs/screenshots/BookParticipantsList.png)
 
 - **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
-![Book Participant Management](docs/screenshots/BookParticipantPreAdd.png)
+![Book Participant Management](docs/screenshots/BookParticipantsPreAdd.png)
 
 - **View Updated Assignments**: After assigning participants to books, the updated assignments are displayed in the list.
 ![Book Participant Management](docs/screenshots/BookParticipantAdded.png)
