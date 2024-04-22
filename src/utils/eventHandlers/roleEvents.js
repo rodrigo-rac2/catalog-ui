@@ -1,6 +1,6 @@
 // catalog-ui/src/utils/eventHandlers/rolesEvents.js
 
-import { toggleForm } from "../helpers/common.js";
+import { toogleElement } from "../helpers/common.js";
 import { displayRoles } from "../helpers/roleHelpers.js";
 import { displayStatusMessage } from "../helpers/common.js";
 import { RoleService } from "../../api-handlers/roleService.js";
@@ -10,10 +10,10 @@ export function setupRoleEventHandlers(apiBaseUrl) {
 
   document
     .getElementById("addRoleBtn")
-    .addEventListener("click", () => toggleForm("role-form-container"));
+    .addEventListener("click", () => toogleElement("role-form-container"));
 
   document.getElementById("loadRoles").addEventListener("click", async () => {
-    toggleForm("roles-list");
+    toogleElement("roles-list");
     displayRoles(await roleService.fetchRoles(), apiBaseUrl);
   });
 
@@ -29,7 +29,7 @@ export function setupRoleEventHandlers(apiBaseUrl) {
           displayStatusMessage("roles", "Role added successfully!", "success");
           const roles = await roleService.fetchRoles();
           displayRoles(roles, apiBaseUrl);
-          toggleForm("role-form-container"); // Optionally close the form
+          toogleElement("role-form-container"); // Optionally close the form
         }
       } catch (error) {
         displayStatusMessage(

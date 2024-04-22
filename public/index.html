@@ -4,7 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Book Catalog API Client</title>
+    <!-- Imports -->
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Include Select2  -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="/src/main.js"></script>
   </head>
   <body>
     <h1>Book Catalog</h1>
@@ -102,44 +112,31 @@
 
     <section id="book-participants">
       <h2>Book Participants</h2>
-      <input
-        type="number"
-        id="load-book-participant-id"
-        placeholder="Enter Book ID to Load Participants"
+      <label for="load-book-id">Book:</label>
+      <select
+        id="load-book-id"
+        name="load-book-participant"
         required
-      />
+      >
+        <!-- Options will be dynamically loaded -->
+      </select>
       <button id="loadBookParticipants">Load Book Participants</button>
       <button id="addBookParticipantBtn">Add Participant to Book</button>
       <ul id="book-participants-list"></ul>
       <div id="book-participants-form-container" style="display: none">
         <form id="book-participant-form">
-          <label for="bp-book-id">Book ID:</label>
-          <input
-            type="number"
-            id="bp-book-id"
-            name="bookid"
-            placeholder="Book ID"
-            required
-          />
-
-          <label for="bp-participant-id">Participant ID:</label>
-          <input
-            type="number"
-            id="bp-participant-id"
-            name="participantid"
-            placeholder="Participant ID"
-            required
-          />
-
-          <label for="bp-role-id">Role ID:</label>
-          <input
-            type="number"
-            id="bp-role-id"
-            name="roleid"
-            placeholder="Role ID"
-            required
-          />
-
+          <div class="form-section">
+            <label for="bp-book-id">Book:</label>
+            <select id="bp-book-id" name="bookid" required></select>
+          </div>
+          <div class="form-section">
+            <label for="bp-participant-id">Participant:</label>
+            <select id="bp-participant-id" name="participantid" required></select>
+          </div>
+          <div class="form-section">
+            <label for="bp-role-id">Role:</label>
+            <select id="bp-role-id" name="roleid" required></select>
+          </div>
           <button type="submit">Submit</button>
         </form>
       </div>
@@ -166,7 +163,5 @@
       <div id="roles-status-messages"></div>
       <div id="role-details"></div>
     </section>
-
-    <script type="module" src="/src/main.js"></script>
   </body>
 </html>
