@@ -1,3 +1,4 @@
+// main.js
 import { setupBookEventHandlers } from './utils/eventHandlers/bookEvents.js';
 import { setupParticipantEventHandlers } from './utils/eventHandlers/participantEvents.js';
 import { setupRoleEventHandlers } from './utils/eventHandlers/roleEvents.js';
