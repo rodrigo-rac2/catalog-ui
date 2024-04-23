@@ -1,8 +1,7 @@
 // catalog-ui/src/utils/eventHandlers/rolesEvents.js
 
-import { toggleElement } from "../helpers/common.js";
+import { toggleElement, displayStatusMessage } from "../helpers/common.js";
 import { displayRoles } from "../helpers/roleHelpers.js";
-import { displayStatusMessage } from "../helpers/common.js";
 import { RoleService } from "../../api-handlers/roleService.js";
 
 export function setupRoleEventHandlers(apiBaseUrl) {
@@ -13,28 +12,98 @@ export function setupRoleEventHandlers(apiBaseUrl) {
     .addEventListener("click", () => toggleElement("role-form-container"));
 
   document.getElementById("loadRoles").addEventListener("click", async () => {
-    toggleElement("roles-list");
-    displayRoles(await roleService.fetchRoles(), apiBaseUrl);
+    const rolesList = document.getElementById("roles-list");
+    if (rolesList.style.display === "block") {
+      rolesList.style.display = "none";
+    } else {
+      try {
+        const roles = await roleService.fetchRoles();
+        displayRoles(roles, apiBaseUrl);
+        rolesList.style.display = "block";
+      } catch (error) {
+        console.error("Error loading roles:", error);
+        displayStatusMessage(
+          "roles",
+          `Failed to load roles: ${error.message}`,
+          "error"
+        );
+      }
+    }
   });
+
+  document.addEventListener("editRole", async (event) => {
+    const { roleId, newDescription } = event.detail;
+    try {
+      await roleService.updateRole(roleId, {
+        description: newDescription
+      });
+      displayStatusMessage("roles", "Role updated successfully", "success");
+      const roles = await roleService.fetchRoles();
+      displayRoles(roles, apiBaseUrl);
+    } catch (error) {
+      console.error("Error updating role:", error);
+      displayStatusMessage(
+        "roles",
+        `Error updating role: ${error.message}`,
+        "error"
+      );
+    }
+  });
+
+  document
+    .getElementById("roles-list")
+    .addEventListener("click", async (event) => {
+      const target = event.target;
+      if (target.classList.contains("delete-btn")) {
+        const roleId = target.dataset.roleId;
+        try {
+          await roleService.deleteRole(roleId);
+          target.closest(".role-item").remove();
+          displayStatusMessage("roles", "Role deleted successfully", "success");
+        } catch (error) {
+          console.error("Error deleting role:", error);
+          displayStatusMessage(
+            "roles",
+            `Error deleting role: ${error.message}`,
+            "error"
+          );
+        }
+      }
+    });
 
   document
     .getElementById("role-form")
     .addEventListener("submit", async (event) => {
       event.preventDefault();
-      const formData = new FormData(event.target);
-      const roleData = Object.fromEntries(formData.entries());
+      const form = event.target;
+      const formData = new FormData(form);
+      const roleData = { description: formData.get("description") };
+      const roleId = form.dataset.roleId;
+
       try {
-        const addedRole = await roleService.addRole(roleData);
-        if (addedRole) {
-          displayStatusMessage("roles", "Role added successfully!", "success");
+        let result;
+        if (roleId) {
+          result = await roleService.updateRole(roleId, roleData);
+        } else {
+          result = await roleService.addRole(roleData);
+        }
+
+        if (result) {
+          displayStatusMessage(
+            "roles",
+            `Role ${roleId ? "updated" : "added"} successfully!`,
+            "success"
+          );
           const roles = await roleService.fetchRoles();
           displayRoles(roles, apiBaseUrl);
-          toggleElement("role-form-container"); // Optionally close the form
+          form.reset();
+          delete form.dataset.roleId;
+          toggleElement("role-form-container");
         }
       } catch (error) {
         displayStatusMessage(
           "roles",
-          `Failed to add role: ${error.message}`,
+          `Failed to ${roleId ? "update" : "add"} role: ${error.message}`,
           "error"
         );
       }

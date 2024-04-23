@@ -1,6 +1,6 @@
 // src/utils/helpers/participantHelpers.js
 
-export function displayParticipants(participants, apiBaseUrl) {
+export function displayParticipants(participants) {
     const participantsList = document.getElementById("participants-list");
     participantsList.innerHTML = "";
 
@@ -34,13 +34,14 @@ export function displayParticipants(participants, apiBaseUrl) {
 }
 
 function toggleParticipantDetails(participant, participantItem) {
-    const existingForm = participantItem.querySelector("form.details-form");
+    const participantFormClassName = `participant-details-form-${participant.participantid}`;
+    const existingForm = participantItem.querySelector(`form.${participantFormClassName}`);
     if (existingForm) {
         existingForm.remove();
     } else {
         removeAnyExistingForms(participantItem); // Ensures no edit form is open
         const details = document.createElement("form");
-        details.className = "details-form";
+        details.className = participantFormClassName;
         details.innerHTML = `<label>Participant details:</label>
                              <p>ID: <input type="text" value="${participant.participantid}" name="id" disabled/>
                              <br>Name: <input type="text" value="${participant.name}" name="name" disabled/></p>

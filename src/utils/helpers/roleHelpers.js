@@ -1,80 +1,86 @@
 // src/utils/helpers/roleHelpers.js
 
-import { displayStatusMessage } from "./common.js";
-
-export function displayRoles(roles, apiBaseUrl) {
-  apiBaseUrl = apiBaseUrl;
-  const list = document.getElementById("roles-list");
-  list.innerHTML = ""; // Clear previous entries
+export function displayRoles(roles) {
+  const roleList = document.getElementById("roles-list");
+  roleList.innerHTML = ""; // Clear previous entries
 
   roles.forEach((role) => {
-    const item = document.createElement("li");
-    item.classList.add("role-item");
-    item.id = `role-${role.roleid}`; // Unique ID for the list item
+    const roleItem = document.createElement("li");
+    roleItem.classList.add("role-item");
+    roleItem.id = `role-${role.roleid}`; // Unique ID for the list item
+
+    const descriptionSpan = document.createElement("span");
+    descriptionSpan.textContent = role.description;
+    descriptionSpan.classList.add("role-description");
 
     // Buttons for open and delete
     const openBtn = document.createElement("button");
     openBtn.textContent = "Open";
     openBtn.classList.add("open-btn");
-    openBtn.onclick = () => {
-      openRoleDetails({ id: role.roleid, description: role.description }); // Assume openRoleDetails now takes an ID
-    };
+    openBtn.onclick = () => toggleRoleDetails(role, roleItem);
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.classList.add("edit-btn");
+    editBtn.onclick = () => toggleEditForm(role, roleItem);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.classList.add("delete-btn");
-    deleteBtn.onclick = () => deleteRole(role.roleid, apiBaseUrl, item); // Assume deleteRole is a function to handle deletion
+    deleteBtn.dataset.roleId = role.roleid;
 
-    // Role description
-    const descriptionText = document.createElement("span");
-    descriptionText.textContent = role.description;
-
-    // Details div that will be toggled
-    const detailsDiv = document.createElement("div");
-    detailsDiv.id = `role-details-${role.roleid}`;
-    detailsDiv.style.display = "none"; // Initially hidden
-
-    item.appendChild(openBtn);
-    item.appendChild(deleteBtn);
-    item.appendChild(descriptionText);
-    item.appendChild(detailsDiv); // This div will hold the detailed info
-
-    list.appendChild(item);
+    roleItem.append(openBtn, editBtn, deleteBtn, descriptionSpan);
+    roleList.appendChild(roleItem);
   });
 }
 
-export function openRoleDetails(role) {
-  const detailsDiv = document.getElementById(`role-details-${role.id}`);
-  const isHidden = detailsDiv.style.display === "none";
-  detailsDiv.style.display = isHidden ? "block" : "none"; // Toggle display
-
-  // If opening, fetch details and display
-  if (isHidden) {
-    // Simulated fetch, replace with actual API call
-    detailsDiv.innerHTML = `
-            <h3>Details for Role:</h3>
-            <p>ID: ${role.id}</p>
-            <p>Description: ${role.description}</p>
-        `;
+function toggleRoleDetails(role, roleItem) {
+  const roleFormClassName = `role-details-form-${role.roleid}`;
+  const existingForm = roleItem.querySelector(`form.${roleFormClassName}`);
+  if (existingForm) {
+    existingForm.remove();
+  } else {
+    removeAnyExistingForms(roleItem); // Ensures no edit form is open
+    const details = document.createElement("form");
+    details.className = roleFormClassName;
+    details.innerHTML = `<label>Role details:</label>
+                           <p>ID: <input type="text" value="${role.roleid}" name="id" disabled/>
+                           <br>Description: <input type="text" value="${role.description}" name="name" disabled/></p>
+                           <button type="button" onclick="this.parentElement.remove();">Close</button>`;
+    roleItem.appendChild(details);
   }
 }
 
-export function deleteRole(roleid, apiBaseUrl, listItemElement) {
-  fetch(`${apiBaseUrl}/roles/${roleid}`, { method: "DELETE" })
-    .then((response) => {
-      if (response.ok) {
-        listItemElement.remove();
-        displayStatusMessage("roles", "Role deleted successfully", "success");
-      } else {
-        displayStatusMessage("roles", "Failed to delete role", "error");
-      }
-    })
-    .catch((error) => {
-      console.error("Error deleting role:", error);
-      displayStatusMessage(
-        "roles",
-        "Error deleting role: " + error.message,
-        "error"
-      );
-    });
+function toggleEditForm(role, roleItem) {
+  const existingForm = roleItem.querySelector("form.edit-form");
+  if (existingForm) {
+    existingForm.remove();
+  } else {
+    removeAnyExistingForms(roleItem); // Ensures no details form is open
+    const form = document.createElement("form");
+    form.className = "edit-form";
+    form.innerHTML = `<label>Edit role:</label>
+                        <p>ID: <input type="text" value="${role.roleid}" name="id" disabled/>
+                        <br>Description: <input type="text" value="${role.description}" name="description"/></p>
+                        <button type="submit">Save</button>
+                        <button type="button" onclick="this.parentElement.remove();">Cancel</button>`;
+    form.onsubmit = (e) =>
+      handleEditSubmit(e, role.roleid, roleItem);
+    roleItem.appendChild(form);
+  }
+}
+
+function handleEditSubmit(event, roleId, roleItem) {
+  event.preventDefault();
+  const newDescription = event.target.elements.description.value;
+  const customEvent = new CustomEvent("editRole", {
+    detail: { roleId, newDescription },
+  });
+  document.dispatchEvent(customEvent);
+  event.target.remove(); // Remove form after submission
+}
+
+function removeAnyExistingForms(roleItem) {
+  const existingForms = roleItem.querySelectorAll("form");
+  existingForms.forEach((form) => form.remove());
 }
