@@ -1,7 +1,6 @@
-// catalog-ui/src/utils/helpers/roleHelpers.js
+// src/utils/helpers/roleHelpers.js
 
 import { displayStatusMessage } from "./common.js";
-import { RoleService } from "../../api-handlers/roleService.js";
 
 export function displayRoles(roles, apiBaseUrl) {
   apiBaseUrl = apiBaseUrl;

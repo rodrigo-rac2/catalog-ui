@@ -1,4 +1,4 @@
-import { toogleElement } from "../helpers/common.js";
+import { toggleElement } from "../helpers/common.js";
 import { displayBooks } from "../helpers/bookHelpers.js";
 import { displayStatusMessage } from "../helpers/common.js";
 import { BookService } from "../../api-handlers/bookService.js";
@@ -8,10 +8,10 @@ export async function setupBookEventHandlers(apiBaseUrl) {
 
   document
     .getElementById("addBookBtn")
-    .addEventListener("click", () => toogleElement("book-form-container"));
+    .addEventListener("click", () => toggleElement("book-form-container"));
 
   document.getElementById("loadBooks").addEventListener("click", async () => {
-    toogleElement("books-list");
+    toggleElement("books-list");
     displayBooks(await bookService.fetchBooks(), apiBaseUrl);
   });
 
@@ -31,7 +31,7 @@ export async function setupBookEventHandlers(apiBaseUrl) {
           displayStatusMessage("books", "Book added successfully!", "success");
           const books = await bookService.fetchBooks();
           displayBooks(books, apiBaseUrl);
-          toogleElement("book-form-container"); // Optionally close the form
+          toggleElement("book-form-container"); // Optionally close the form
         }
       } catch (error) {
         displayStatusMessage(

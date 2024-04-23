@@ -1,6 +1,6 @@
 // catalog-ui/src/utils/helpers/common.js
 
-export function toogleElement(containerId) {
+export function toggleElement(containerId) {
     const container = document.getElementById(containerId);
     if (!container) {
         console.error(`toogleElement: No element found with ID '${containerId}'`);
