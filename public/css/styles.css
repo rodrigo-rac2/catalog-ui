@@ -38,11 +38,13 @@ button:hover {
 }
 
 select {
-  width: 200px;
+  width: 25% !important;
+  margin-bottom: 5px;
 }
 
 .select2-container {
-  width: 50% !important;
+  width: 25% !important;
+  margin-bottom: 5px;
 }
 
 form label {
@@ -52,7 +54,7 @@ form label {
 
 form input,
 form textarea {
-  width: 100%;
+  width: 25% !important;
   padding: 8px;
   margin-top: 5px;
 }
@@ -62,6 +64,7 @@ form button {
 }
 
 .form-section select {
+  width: 25% !important;
   margin-bottom: 5px; /* Spacing between label and select */
 }
 
@@ -77,6 +80,7 @@ form button {
   margin-bottom: 5px;
   padding: 5px;
   border: 1px solid #ccc;
+  width: 35%;
   list-style-type: none;
 }
 
@@ -88,6 +92,7 @@ form button {
   margin-bottom: 5px;
   padding: 5px;
   border: 1px solid #ccc;
+  width: 35%;
   list-style-type: none;
 }
 
@@ -99,6 +104,7 @@ form button {
   margin-bottom: 5px;
   padding: 5px;
   border: 1px solid #ccc;
+  width: 35%;
   list-style-type: none;
 }
 
@@ -110,6 +116,7 @@ form button {
   margin-bottom: 5px;
   padding: 5px;
   border: 1px solid #ccc;
+  width: 35%;
   list-style-type: none;
 }
 
@@ -117,9 +124,16 @@ form button {
   margin-right: 5px;
 }
 
+.book-participants-header {
+  margin-bottom: 5px;
+  margin-bottom: 0px;
+  list-style-type: none;
+  font-weight: bold;
+}
+
 #bp-book-id,
 #load-book-participant-id,
 #bp-participant-id,
 #bp-role-id {
-  width: 50% !important; /* Adjust according to your layout */
+  width: 50% !important;
 }

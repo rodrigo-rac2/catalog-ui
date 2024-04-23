@@ -1,6 +1,6 @@
 // catalog-ui/src/utils/helpers/bookParticipantHelpers.js
 
-import { displayStatusMessage } from "./common.js";
+import { displayStatusMessage, resetStatusMessage } from "./common.js";
 import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
 import { BookService } from "../../api-handlers/bookService.js";
 import { ParticipantService } from "../../api-handlers/participantService.js";
@@ -8,6 +8,7 @@ import { RoleService } from "../../api-handlers/roleService.js";
 
 export async function displayBookParticipants(bookParticipants, apiBaseUrl) {
   const list = document.getElementById("book-participants-list");
+  resetStatusMessage("book-participants");
   list.innerHTML = "";
 
   if (!list) {
@@ -23,6 +24,10 @@ export async function displayBookParticipants(bookParticipants, apiBaseUrl) {
     return;
   }
   if (Array.isArray(bookParticipants) && bookParticipants.length > 0) {
+    const header = document.createElement("p");
+    header.textContent = `Participants for book ${bookParticipants[0].book.title}:`;
+    header.classList.add("book-participants-header");
+    list.appendChild(header);
     bookParticipants.forEach(async (bp) => {
       const item = document.createElement("li");
 
