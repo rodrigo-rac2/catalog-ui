@@ -1,124 +1,206 @@
 // catalog-ui/src/utils/helpers/bookHelpers.js
 
-import { displayStatusMessage } from "./common.js";
-import { BookService } from "../../api-handlers/bookService.js";
-import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
+import {
+  getAuthorsForBook,
+  getNonAuthorsForBook,
+} from "../eventHandlers/bookEvents.js";
 
+export async function displayBooks(books) {
+  const bookList = document.getElementById("books-list");
+  bookList.innerHTML = ""; // Clear previous entries
 
-export async function displayBooks(books, apiBaseUrl) {
-  const list = document.getElementById("books-list");
-  list.innerHTML = ""; // Clear previous entries
-
-  if (!list) {
+  if (!bookList) {
     console.error('displayBooks: No element found with ID "books-list"');
     return;
   }
-  list.innerHTML = "";
+  bookList.innerHTML = "";
   books.forEach(async (book) => {
-    const item = document.createElement("li");
-    item.classList.add("book-item");
-    item.id = `book-${book.bookid}`;
+    const bookItem = document.createElement("li");
+    bookItem.classList.add("book-item");
+    bookItem.id = `book-${book.bookid}`;
+
+    const bookDescriptionSpan = document.createElement("span");
+    bookDescriptionSpan.textContent = `${
+      book.title
+    } by ${await getAuthorsListText(book)}, ISBN: ${book.isbn}`;
+    bookDescriptionSpan.classList.add("book-description");
 
     // Buttons for open and delete
     const openBtn = document.createElement("button");
     openBtn.textContent = "Open";
     openBtn.classList.add("open-btn");
     openBtn.onclick = () => {
-      openBookDetails(book, apiBaseUrl);
+      toggleBookDetails(book, bookItem);
     };
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = "Edit";
+    editBtn.classList.add("edit-btn");
+    editBtn.onclick = () => toggleEditForm(book, bookItem);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
     deleteBtn.classList.add("delete-btn");
-    deleteBtn.onclick = () => deleteBook(book.bookid, apiBaseUrl, item);
+    deleteBtn.dataset.bookId = book.bookid;
 
-    // Book title
-    const descriptionText = document.createElement("span");
-    descriptionText.textContent = `${book.title} by ${await getAuthorListText(
-      book, apiBaseUrl
-    )}, ISBN: ${book.isbn}`;
-
-    // Details div that will be toggled
-    const detailsDiv = document.createElement("div");
-    detailsDiv.id = `book-details-${book.bookid}`;
-    detailsDiv.style.display = "none"; // Initially hidden
-
-    item.appendChild(openBtn);
-    item.appendChild(deleteBtn);
-    item.appendChild(descriptionText);
-    item.appendChild(detailsDiv); // This div will hold the detailed info
-
-    list.appendChild(item);
+    bookItem.append(openBtn, editBtn, deleteBtn, bookDescriptionSpan);
+    bookList.appendChild(bookItem);
   });
 }
 
-export async function openBookDetails(book, apiBaseUrl) {
-  const detailsDiv = document.getElementById(`book-details-${book.bookid}`);
-  const isHidden = detailsDiv.style.display === "none";
-  detailsDiv.style.display = isHidden ? "block" : "none"; // Toggle display
-
-  // If opening, fetch details and display
-  if (isHidden) {
-    try {
-      const fetchedBook = await new BookService(apiBaseUrl).fetchBook(book.bookid);
-      const authorListText = await getAuthorListText(fetchedBook, apiBaseUrl);
-
-      detailsDiv.innerHTML = `
-                <h3>Book: ${fetchedBook.title} </h3>
-                <p>By: ${authorListText}</p>
-                <p>ID: ${fetchedBook.bookid}</p>
-                <p>Description: ${fetchedBook.description}</p>
-                <p>Edition: ${fetchedBook.editionnumber}</p>
-                <p>Publisher: ${fetchedBook.publisher}</p>
-                <p>Date: ${fetchedBook.publicationdate}</p>
-                <p>Location: ${fetchedBook.publicationplace}</p>
-                <p>Pages: ${fetchedBook.numberofpages}</p>
-                <p>ISBN: ${fetchedBook.isbn}</p>
-            `;
-    } catch (error) {
-      console.error('Error fetching book details:', error);
-      detailsDiv.innerHTML = '<p>Error loading book details. Please try again.</p>';
-    }
+async function toggleBookDetails(book, bookItem) {
+  const bookFormClassName = `book-details-form-${book.bookid}`;
+  const existingForm = bookItem.querySelector(`form.${bookFormClassName}`);
+  if (existingForm) {
+    existingForm.remove();
+  } else {
+    removeAnyExistingForms(bookItem); // Ensures no edit form is open
+    const details = document.createElement("form");
+    details.className = bookFormClassName;
+    const authorListText = await getAuthorsListText(book);
+    const nonAuthorInnerHtml = (await getNonAuthorsListText(book))
+      ? `<br />And: <br/><input type="text" value="${await getNonAuthorsListText(
+          book
+        )}" name="participants" disabled/>`
+      : "";
+    details.innerHTML = `<label>Book details:</label>
+                             <p>
+                             Title: <br /><input type="text" value="${book.title}" name="title" disabled/>
+                             <br />By: <br /><input type="text" value="${authorListText}" name="authors" disabled/>
+                             ${nonAuthorInnerHtml}
+                             <br />ID: <br /><input type="text" value="${book.bookid}" name="id" disabled/>
+                             <br />Description: <br /><input type="text" value="${book.description}" name="description" disabled/>
+                             <br />Publisher: <br /><input type="text" value="${book.publisher}" name="publisher" disabled/>
+                             <br />Edition: <br /><input type="text" value="${book.editionnumber}" name="editionnumber" disabled/>
+                             <br />Date: <br /><input type="date" value="${book.publicationdate}" name="publicationdate" disabled/>
+                             <br />Location: <br /><input type="text" value="${book.publicationplace}" name="publicationplace" disabled/>
+                             <br />Pages: <br /><input type="text" value="${book.numberofpages}" name="numberofpages" disabled/>
+                             <br />ISBN: <br /><input type="text" value="${book.isbn}" name="isbn" disabled/>
+                             </p>
+                             <button type="button" onclick="this.parentElement.remove();">Close</button>`;
+    bookItem.appendChild(details);
   }
 }
 
-export async function getAuthorListText(book, apiBaseUrl) {
-  // Fetch authors asynchronously
-  const authorList = await new BookParticipantService(apiBaseUrl).fetchBookParticipantsWithRole(book.bookid, 1);
+async function toggleEditForm(book, bookItem) {
+  const existingForm = bookItem.querySelector("form.edit-form");
+  if (existingForm) {
+    existingForm.remove();
+  } else {
+    removeAnyExistingForms(bookItem); // Ensures no details form is open
+    const form = document.createElement("form");
+    form.className = "edit-form";
+    const authorListText = await getAuthorsListText(book);
+    const nonAuthorInnerHtml = (await getNonAuthorsListText(book))
+      ? `<br />And: <br /><input type="text" value="${await getNonAuthorsListText(
+          book
+        )}" name="participants" disabled/>`
+      : "";
+    form.innerHTML = `<label>Edit Book:</label>
+                          <p>
+                          Title: <br /><input type="text" value="${book.title}" name="title"/>
+                          <br />By: <br /><input type="text" value="${authorListText}" name="authors" disabled/>
+                          ${nonAuthorInnerHtml}
+                          <br />ID: <br /><input type="text" value="${book.bookid}" name="id" disabled/>
+                          <br />Description: <br /><input type="text" value="${book.description}" name="description"/>
+                          <br />Publisher: <br /><input type="text" value="${book.publisher}" name="publisher"/>
+                          <br />Edition: <br /><input type="text" value="${book.editionnumber}" name="editionnumber"/>
+                          <br />Date: <br /><input type="date" value="${book.publicationdate}" name="publicationdate"/>
+                          <br />Location: <br /><input type="text" value="${book.publicationplace}" name="publicationplace"/>
+                          <br />Pages: <br /><input type="text" value="${book.numberofpages}" name="numberofpages"/>
+                          <br />ISBN: <br /><input type="text" value="${book.isbn}" name="isbn"/>
+                          </p>
+                          <button type="submit">Save</button>
+                          <button type="button" onclick="this.parentElement.remove();">Cancel</button>`;
+    form.onsubmit = (e) => handleEditSubmit(e, book.bookid, bookItem);
+    bookItem.appendChild(form);
+  }
+}
 
-  // If there's only one author, return their name directly
+function handleEditSubmit(event, bookId, bookItem) {
+  event.preventDefault();
+  const newTitle = event.target.elements.title.value;
+  const newDescription = event.target.elements.description.value;
+  const newEditionNumber = event.target.elements.editionnumber.value;
+  const newPublisher = event.target.elements.publisher.value;
+  const newPublicationDate = event.target.elements.publicationdate.value;
+  const newPublicationPlace = event.target.elements.publicationplace.value;
+  const newNumberOfPages = event.target.elements.numberofpages.value;
+  const newIsbn = event.target.elements.isbn.value;
+
+  const customEvent = new CustomEvent("editBook", {
+    detail: {
+      bookId,
+      newTitle,
+      newDescription,
+      newEditionNumber,
+      newPublisher,
+      newPublicationDate,
+      newPublicationPlace,
+      newNumberOfPages,
+      newIsbn
+    },
+  });
+  document.dispatchEvent(customEvent);
+  event.target.remove(); // Remove form after submission
+}
+
+function removeAnyExistingForms(bookItem) {
+  const existingForms = bookItem.querySelectorAll("form");
+  existingForms.forEach((form) => form.remove());
+}
+
+async function getAuthorsListText(book) {
+  // Fetch authors asynchronously
+  const authorList = await getAuthorsForBook(book.bookid, 1);
+
+  if (authorList.length === 0) {
+    return `Please add authors for ${book.title}`;
+  }
+
   if (authorList.length === 1) {
     return authorList[0].participant.name;
   }
 
-  // Build a string of author names with commas and "and" before the last author
-  let authorListText = authorList.map(author => author.participant.name).join(", ");
+  let authorListText = authorList.map((author) => author.participant.name).join(", ");
 
-  // Replace the last comma with ", and" if there are more than one author
   const lastCommaIndex = authorListText.lastIndexOf(",");
   if (lastCommaIndex !== -1) {
-    authorListText = authorListText.substring(0, lastCommaIndex) + " and" + authorListText.substring(lastCommaIndex + 1);
+    authorListText =
+      authorListText.substring(0, lastCommaIndex) +
+      " and" +
+      authorListText.substring(lastCommaIndex + 1);
   }
 
   return authorListText;
-};
+}
 
+async function getNonAuthorsListText(book) {
+  // Fetch authors asynchronously
+  const participantList = await getNonAuthorsForBook(book.bookid, 1);
 
-export async function deleteBook(bookid, apiBaseUrl, listItemElement) {
-    try {
-      response = await new BookService(apiBaseUrl).deleteBook(bookid);
-      if (response.ok) {
-        listItemElement.remove();
-        displayStatusMessage("books", "Book deleted successfully", "success");
-      } else {
-        displayStatusMessage("books", "Failed to delete book", "error");
-      }
-    } catch (error) {
-      console.error("Error deleting book:", error);
-      displayStatusMessage(
-        "books",
-        "Error deleting book: " + error.message,
-        "error"
-      );
-    }
+  if (participantList.length === 0) {
+    return;
+  }
+
+  if (participantList.length === 1) {
+    return participantList[0].book.name;
+  }
+
+  let participantListText = participantList
+    .map(
+      (participant) =>
+        `${participant.participant.name} (${participant.role.description})`
+    )
+    .join(", ");
+
+  const lastCommaIndex = participantListText.lastIndexOf(",");
+  if (lastCommaIndex !== -1) {
+    participantListText =
+      participantListText.substring(0, lastCommaIndex) +
+      " and" +
+      participantListText.substring(lastCommaIndex + 1);
+  }
+
+  return participantListText;
 }

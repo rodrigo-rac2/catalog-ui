@@ -28,9 +28,28 @@ export class BookParticipantService {
         `${this.apiBaseUrl}/books/${bookId}/roles/${roleId}/participants`
       );
       if (!response.ok) {
-        throw new Error(
+        console.error(
           `Failed to fetch participants for book with ID: ${bookId} and role ID: ${roleId}: ${response.statusText}`
         );
+        return;
+      }
+      return await response.json();
+    } catch (error) {
+      console.error("Error fetching participants:", error);
+      throw error;
+    }
+  }
+
+  async fetchBookParticipantsWithoutRole(bookId, roleId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/filterbyrole/${roleId}/participants`
+      );
+      if (!response.ok) {
+        console.error(
+          `Failed to fetch filtered participants for book with ID: ${bookId} and role ID: ${roleId}: ${response.statusText}`
+        );
+        return;
       }
       return await response.json();
     } catch (error) {

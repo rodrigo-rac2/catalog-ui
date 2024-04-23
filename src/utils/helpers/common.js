@@ -18,3 +18,9 @@ export function displayStatusMessage(type, message, status) {
     statusDiv.textContent = message;
     statusDiv.className = status; // Apply different classes for styling based on success or error
 }
+
+export function resetStatusMessage(type) {
+    const statusDiv = document.getElementById(`${type}-status-messages`);
+    statusDiv.textContent = "";
+    statusDiv.className = "";
+}

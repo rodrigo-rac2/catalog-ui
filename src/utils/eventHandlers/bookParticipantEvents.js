@@ -8,7 +8,7 @@ import {
   loadParticipantsSelect,
   loadRolesSelect,
 } from "../helpers/bookParticipantHelpers.js";
-import { displayStatusMessage, toggleVisibility } from "../helpers/common.js";
+import { displayStatusMessage, resetStatusMessage, toggleVisibility } from "../helpers/common.js";
 import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
 
 export async function setupBookParticipantEventHandlers(apiBaseUrl) {
@@ -19,6 +19,7 @@ export async function setupBookParticipantEventHandlers(apiBaseUrl) {
   document
     .getElementById("addBookParticipantBtn")
     .addEventListener("click", async () => {
+      resetStatusMessage("book-participants");
       const bookId = document.getElementById("load-book-id").value;
       const participantsListEl = document.getElementById(
         "book-participants-list"
@@ -30,13 +31,6 @@ export async function setupBookParticipantEventHandlers(apiBaseUrl) {
       loadBooksSelect(apiBaseUrl, true, bookId); // Load with preselected book if any
       loadParticipantsSelect(apiBaseUrl);
       loadRolesSelect(apiBaseUrl);
-
-      if (!bookId) {
-        console.error("No book ID provided");
-        participantsListEl.style.display = "none";
-        bookParticipantsFormContainer.style.display = "none";
-        return;
-      }
 
       // In case the user didn't select a new book but clicked the button again, toggle form visibility
       if (bookId === lastLoadedBookId) {
@@ -53,12 +47,14 @@ export async function setupBookParticipantEventHandlers(apiBaseUrl) {
         bookParticipantsFormContainer.style.display = "block";
         lastLoadedBookId = bookId;
       }
+
       initializeSelects(apiBaseUrl);
     });
 
   document
     .getElementById("loadBookParticipants")
     .addEventListener("click", async function () {
+      resetStatusMessage("book-participants");
       const bookId = document.getElementById("load-book-id").value;
       const participantsListEl = document.getElementById(
         "book-participants-list"
@@ -69,6 +65,11 @@ export async function setupBookParticipantEventHandlers(apiBaseUrl) {
 
       if (!bookId) {
         console.error("No book ID provided");
+        displayStatusMessage(
+          "book-participants",
+          "Please select a book to load participants.",
+          "error"
+        );
         participantsListEl.style.display = "none";
         return;
       }
@@ -97,6 +98,7 @@ export async function setupBookParticipantEventHandlers(apiBaseUrl) {
   document
     .getElementById("book-participant-form")
     .addEventListener("submit", async (event) => {
+      resetStatusMessage("book-participants");
       event.preventDefault();
       const formData = new FormData(event.target);
       const data = Object.fromEntries(formData.entries());

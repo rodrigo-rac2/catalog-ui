@@ -6,12 +6,14 @@ import { setupBookParticipantEventHandlers } from './utils/eventHandlers/bookPar
 
 let apiBaseUrl;
 
-async function fetchConfig() {
+export async function fetchConfig() {
     try {
         // Assuming your server provides this endpoint
         const response = await fetch('/config');
         const config = await response.json();
         apiBaseUrl = config.apiBaseUrl; // Adjust according to the actual property name
+
+        return apiBaseUrl;
     } catch (error) {
         console.error('Failed to load configuration:', error);
         throw new Error('Failed to load configuration');
@@ -20,7 +22,7 @@ async function fetchConfig() {
 
 async function initializeApplication() {
     try {
-        await fetchConfig(); // Ensure config is loaded before proceeding
+        apiBaseUrl = await fetchConfig(); // Ensure config is loaded before proceeding
         console.log('Initializing application with base API URL:', apiBaseUrl);
 
         // Initialize event handlers with the API base URL

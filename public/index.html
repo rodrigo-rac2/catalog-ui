@@ -72,11 +72,13 @@
           />
           <label for="book-publication-date">Publication Date:</label>
           <input
-            type="text"
+            type="date"
             id="book-publication-date"
             name="publicationdate"
             placeholder="Publication Date"
+            required
           />
+
           <label for="book-pages">Number of Pages:</label>
           <input
             type="text"
@@ -114,17 +116,14 @@
     <section id="book-participants">
       <h2>Book Participants</h2>
       <label for="load-book-id">Book:</label>
-      <select
-        id="load-book-id"
-        name="load-book-participant"
-        required
-      >
+      <br /><select id="load-book-id" name="load-book-participant" required>
         <!-- Options will be dynamically loaded -->
       </select>
-      <button id="loadBookParticipants">Load Book Participants</button>
+      <br /><button id="loadBookParticipants">Load Book Participants</button>
       <button id="addBookParticipantBtn">Add Participant to Book</button>
       <ul id="book-participants-list"></ul>
       <div id="book-participants-form-container" style="display: none">
+        <p class="book-participants-header">Add Participant to Book: </p>
         <form id="book-participant-form">
           <div class="form-section">
             <label for="bp-book-id">Book:</label>
@@ -132,7 +131,11 @@
           </div>
           <div class="form-section">
             <label for="bp-participant-id">Participant:</label>
-            <select id="bp-participant-id" name="participantid" required></select>
+            <select
+              id="bp-participant-id"
+              name="participantid"
+              required
+            ></select>
           </div>
           <div class="form-section">
             <label for="bp-role-id">Role:</label>
