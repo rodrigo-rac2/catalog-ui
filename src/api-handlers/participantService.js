@@ -1,4 +1,4 @@
-// participantService.js
+// /src/api-handlers/participantService.js
 
 export class ParticipantService {
     constructor(apiBaseUrl) {
@@ -33,6 +33,40 @@ export class ParticipantService {
         } catch (error) {
             console.error('Error adding participant:', error);
             return null;
+        }
+    }
+
+    async updateParticipant(participantId, participantData) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/participants/${participantId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(participantData)
+            });
+            if (!response.ok) {
+                const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
+                throw new Error(`Failed to update participant: ${errorResponse.message}`);
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating participant:', error);
+            return null;
+        }
+    }
+
+    async deleteParticipant(participantId) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/participants/${participantId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) {
+                const errorResponse = await response.json();
+                throw new Error(`Failed to delete participant: ${errorResponse.message}`);
+            }
+            return response.ok;
+        } catch (error) {
+            console.error('Error deleting participant:', error);
+            throw error; // Re-throw to handle it in the calling context
         }
     }
 }

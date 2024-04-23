@@ -1,96 +1,81 @@
-// catalog-ui/src/utils/helpers/participantHelpers.js
-
-import { displayStatusMessage } from "./common.js";
-import { ParticipantService } from "../../api-handlers/participantService.js";
-
-let apiBaseUrl;
+// src/utils/helpers/participantHelpers.js
 
 export function displayParticipants(participants, apiBaseUrl) {
-  apiBaseUrl = apiBaseUrl;
-  const participantsList = document.getElementById("participants-list");
-  participantsList.innerHTML = ""; // Clear previous entries
+    const participantsList = document.getElementById("participants-list");
+    participantsList.innerHTML = "";
 
-  participants.forEach((participant) => {
-    const participantItem = document.createElement("li");
-    participantItem.classList.add("participant-item");
-    participantItem.id = `participant-${participant.participantid}`; // Unique ID for the list item
+    participants.forEach((participant) => {
+        const participantItem = document.createElement("li");
+        participantItem.classList.add("participant-item");
+        participantItem.id = `participant-${participant.participantid}`;
 
-    // Create open and delete buttons for each participant
-    const openBtn = document.createElement("button");
-    openBtn.textContent = "Open";
-    openBtn.classList.add("open-btn");
-    openBtn.onclick = () => {
-      openParticipantDetails({
-        id: participant.participantid,
-        name: participant.name,
-      });
-    };
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = participant.name;
+        nameSpan.classList.add("participant-name");
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.classList.add("delete-btn");
-    deleteBtn.onclick = () =>
-      deleteParticipant(participant.participantid, apiBaseUrl, participantItem);
+        const openBtn = document.createElement("button");
+        openBtn.textContent = "Open";
+        openBtn.classList.add("open-btn");
+        openBtn.onclick = () => toggleParticipantDetails(participant, participantItem);
 
-    // Participant description
-    const descriptionText = document.createElement("span");
-    descriptionText.textContent = participant.name;
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.classList.add("edit-btn");
+        editBtn.onclick = () => toggleEditForm(participant, participantItem);
 
-    // Details div that will be toggled
-    const detailsDiv = document.createElement("div");
-    detailsDiv.id = `details-participant-${participant.participantid}`;
-    detailsDiv.style.display = "none"; // Initially hidden
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("delete-btn");
+        deleteBtn.dataset.participantId = participant.participantid;
 
-    participantItem.appendChild(openBtn);
-    participantItem.appendChild(deleteBtn);
-    participantItem.appendChild(descriptionText);
-    participantItem.appendChild(detailsDiv); // This div will hold the detailed info
-
-    participantsList.appendChild(participantItem);
-  });
-}
-
-export function openParticipantDetails(participant) {
-  const detailsDiv = document.getElementById(
-    `details-participant-${participant.id}`
-  );
-  const isHidden = detailsDiv.style.display === "none";
-  detailsDiv.style.display = isHidden ? "block" : "none"; // Toggle display
-
-  // If opening, fetch details and display
-  if (isHidden) {
-    detailsDiv.innerHTML = `
-              <h3>Details for Participant:</h3>
-              <p>ID: ${participant.id}</p>
-              <p>Name: ${participant.name}</p>
-          `;
-  }
-}
-
-export function deleteParticipant(participantid, apiBaseUrl, participantItem) {
-  fetch(`${apiBaseUrl}/participants/${participantid}`, { method: "DELETE" })
-    .then((response) => {
-      if (response.ok) {
-        participantItem.remove();
-        displayStatusMessage(
-          "participants",
-          "Participant deleted successfully",
-          "success"
-        );
-      } else {
-        displayStatusMessage(
-          "participants",
-          "Failed to delete participant",
-          "error"
-        );
-      }
-    })
-    .catch((error) => {
-      console.error("Error deleting participant:", error);
-      displayStatusMessage(
-        "participants",
-        "Error deleting participant: " + error.message,
-        "error"
-      );
+        participantItem.append(openBtn, editBtn, deleteBtn, nameSpan);
+        participantsList.appendChild(participantItem);
     });
+}
+
+function toggleParticipantDetails(participant, participantItem) {
+    const existingForm = participantItem.querySelector("form.details-form");
+    if (existingForm) {
+        existingForm.remove();
+    } else {
+        removeAnyExistingForms(participantItem); // Ensures no edit form is open
+        const details = document.createElement("form");
+        details.className = "details-form";
+        details.innerHTML = `<label>Participant details:</label>
+                             <p>ID: <input type="text" value="${participant.participantid}" name="id" disabled/>
+                             <br>Name: <input type="text" value="${participant.name}" name="name" disabled/></p>
+                             <button type="button" onclick="this.parentElement.remove();">Close</button>`;
+        participantItem.appendChild(details);
+    }
+}
+
+function toggleEditForm(participant, participantItem) {
+    const existingForm = participantItem.querySelector("form.edit-form");
+    if (existingForm) {
+        existingForm.remove();
+    } else {
+        removeAnyExistingForms(participantItem); // Ensures no details form is open
+        const form = document.createElement("form");
+        form.className = "edit-form";
+        form.innerHTML = `<label>Edit Participant:</label>
+                          <p>ID: <input type="text" value="${participant.participantid}" name="id" disabled/>
+                          <br>Name: <input type="text" value="${participant.name}" name="name"/></p>
+                          <button type="submit">Save</button>
+                          <button type="button" onclick="this.parentElement.remove();">Cancel</button>`;
+        form.onsubmit = (e) => handleEditSubmit(e, participant.participantid, participantItem);
+        participantItem.appendChild(form);
+    }
+}
+
+function handleEditSubmit(event, participantId, participantItem) {
+    event.preventDefault();
+    const newName = event.target.elements.name.value;
+    const customEvent = new CustomEvent("editParticipant", { detail: { participantId, newName } });
+    document.dispatchEvent(customEvent);
+    event.target.remove(); // Remove form after submission
+}
+
+function removeAnyExistingForms(participantItem) {
+    const existingForms = participantItem.querySelectorAll("form");
+    existingForms.forEach(form => form.remove());
 }
