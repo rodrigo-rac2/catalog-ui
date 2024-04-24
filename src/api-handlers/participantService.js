@@ -18,6 +18,19 @@ export class ParticipantService {
         }
     }
 
+    async fetchParticipant(participantId) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/participants/${participantId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch participant');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching participant:', error);
+            return null;
+        }
+    }
+
     async addParticipant(participantData) {
         try {
             const response = await fetch(`${this.apiBaseUrl}/participants/`, {
