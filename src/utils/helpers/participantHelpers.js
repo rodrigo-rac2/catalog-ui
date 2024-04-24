@@ -51,8 +51,10 @@ function toggleParticipantDetails(participant, participantItem) {
     const details = document.createElement("form");
     details.className = participantFormClassName;
     details.innerHTML = `<label>Participant details:</label>
-                             <p>ID: <input type="text" value="${participant.participantid}" name="id" disabled/>
-                             <br>Name: <input type="text" value="${participant.name}" name="name" disabled/></p>
+                             <p>ID: 
+                             <br /><input type="text" value="${participant.participantid}" name="id" disabled/>
+                             <br />Name: 
+                             <br /><input type="text" value="${participant.name}" name="name" disabled/></p>
                              <button type="button" onclick="this.parentElement.remove();">Close</button>`;
     participantItem.appendChild(details);
   }
@@ -67,8 +69,10 @@ function toggleEditForm(participant, participantItem) {
     const form = document.createElement("form");
     form.className = "edit-form";
     form.innerHTML = `<label>Edit Participant:</label>
-                          <p>ID: <input type="text" value="${participant.participantid}" name="id" disabled/>
-                          <br>Name: <input type="text" value="${participant.name}" name="name"/></p>
+                          <p>ID: 
+                          <br /><input type="text" value="${participant.participantid}" name="id" disabled/>
+                          <br />Name:
+                          <br /><input type="text" value="${participant.name}" name="name"/></p>
                           <button type="submit">Save</button>
                           <button type="button" onclick="this.parentElement.remove();">Cancel</button>`;
     form.onsubmit = (e) =>

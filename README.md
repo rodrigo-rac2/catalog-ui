@@ -34,35 +34,72 @@ This project provides a web-based user interface for interacting with the Book C
 
 ### Features
 
-#### Book Management
+<details>
+<summary>Book Management</summary>
+
 - **Add New Books**: Users can add new books to the catalog, specifying details such as title, ISBN, and description.
+
+![Add Books](docs/screenshots/BookCreate.png)
+
 - **View Books**: Users can view a list of all books currently stored in the catalog.
+
+![Book List](docs/screenshots/BookList.png)
+
 - **Update and Delete**: Each book can be updated or deleted directly from the list.
 
-![Book Managemnet](docs/screenshots/BookList.png)
+![Update Book](docs/screenshots/BookEdit.png)
 
-#### Participant Management
-- **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
+![Book Details](docs/screenshots/BookDetails.png)
+
+</details>
+
+<details>
+<summary>Participant Management</summary>
+
 - **View Participants**: Displays a list of all participants.
+![Participant Details](docs/screenshots/ParticipantDetails.png)
+![Participant List](docs/screenshots/ParticipantList.png)
+
+- **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
+![Create Participant](docs/screenshots/ParticipantCreate.png)
+
 - **Update and Delete**: Participants can be updated or removed as required.
+![Update Participant](docs/screenshots/ParticipantEdit.png)
 
-![Participant Management](docs/screenshots/ParticipantAdded.png)
+</details>
 
-#### Role Management
-- **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
+<details>
+<summary>Role Management</summary>
+
 - **View Roles**: All roles can be viewed, updated, or deleted from a simple interface.
+![Role Details](docs/screenshots/RoleDetails.png)
+![Role List](docs/screenshots/RoleList.png)
 
-![Role Management](docs/screenshots/RoleDetails.png)
+- **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
+![Create Role](docs/screenshots/RoleCreate.png)
 
-#### Book Participants
-- **View Assignments**: Review all participant assignments for books within the catalog.
+- **Update and Delete**: Roles can be updated or removed as needed.
+![Update Role](docs/screenshots/RoleEdit.png)
+
+</details>
+
+<details><summary>Book Participants</summary>
+
+- **View Assignments**: Review all participant assignments for a book within the catalog.
 ![Book Participant Management](docs/screenshots/BookParticipantsList.png)
 
 - **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
-![Book Participant Management](docs/screenshots/BookParticipantsPreAdd.png)
+![Add Book Participant](docs/screenshots/BookParticipantCreate.png)
 
-- **View Updated Assignments**: After assigning participants to books, the updated assignments are displayed in the list.
-![Book Participant Management](docs/screenshots/BookParticipantAdded.png)
+**Update and Delete**: Assignments can be updated or removed as needed.
+
+![Book Participant Edit](docs/screenshots/BookParticipantEdit.png)
+
+![Book Participant Delete](docs/screenshots/BookParticipantDelete.png)
+
+- **View Updated Assignments**: After assigning participants to books or updating their roles, the updated assignments are displayed in the list.
+
+</details>
 
 #### Dynamic Configuration
 - **API Integration**: The system dynamically fetches and updates its configuration from a central API, ensuring all components are always in sync.
