@@ -11,9 +11,10 @@ export class BookParticipantService {
         `${this.apiBaseUrl}/books/${bookId}/participants`
       );
       if (!response.ok) {
-        throw new Error(
+        console.error(
           `Failed to fetch book participants: ${response.statusText}`
         );
+        return []
       }
       return await response.json();
     } catch (error) {
@@ -31,7 +32,7 @@ export class BookParticipantService {
         console.error(
           `Failed to fetch participants for book with ID: ${bookId} and role ID: ${roleId}: ${response.statusText}`
         );
-        return;
+        return [];
       }
       return await response.json();
     } catch (error) {
@@ -49,7 +50,7 @@ export class BookParticipantService {
         console.error(
           `Failed to fetch filtered participants for book with ID: ${bookId} and role ID: ${roleId}: ${response.statusText}`
         );
-        return;
+        return [];
       }
       return await response.json();
     } catch (error) {
@@ -91,7 +92,7 @@ export class BookParticipantService {
         { method: "PUT" }
       );
       if (!response.ok) {
-        throw new Error(
+        console.error(
           `Failed to update participant's role: ${errorResponse.message}`
         );
       }
@@ -101,8 +102,7 @@ export class BookParticipantService {
         const result = await response.json();
         return result;
       }
-      return {}; // Return an empty object dor no content
-      return await response.json();
+      return response.ok;
     } catch (error) {
       console.error("Error updating participant's role:", error);
       throw error;

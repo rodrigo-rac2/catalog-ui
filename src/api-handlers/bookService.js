@@ -9,7 +9,8 @@ export class BookService {
     try {
       const response = await fetch(`${this.apiBaseUrl}/books/`);
       if (!response.ok) {
-        throw new Error("Failed to fetch books");
+        console.error("Failed to fetch books");
+        return []
       }
       return await response.json();
     } catch (error) {
@@ -22,7 +23,8 @@ export class BookService {
     try {
       const response = await fetch(`${this.apiBaseUrl}/books/${bookId}`);
       if (!response.ok) {
-        throw new Error("Failed to fetch book with ID: " + bookId);
+        console.error("Failed to fetch book with ID: " + bookId);
+        return null;
       }
       return await response.json();
     } catch (error) {
@@ -74,9 +76,10 @@ export class BookService {
         method: "DELETE",
       });
       if (!response.ok) {
-        throw new Error("Failed to delete book with ID: " + bookId);
-      }
-      return await response.json(); // Assuming the server sends back a JSON with success message
+        const errorResponse = await response.json();
+        throw new Error(`Failed to delete book: ${errorResponse.message}`);
+    }
+    return response.ok;
     } catch (error) {
       console.error("Error deleting book:", error);
       throw error; // Rethrowing the error to be handled by the caller

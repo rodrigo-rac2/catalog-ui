@@ -9,7 +9,8 @@ export class RoleService {
         try {
             const response = await fetch(`${this.apiBaseUrl}/roles/`);
             if (!response.ok) {
-                throw new Error('Failed to fetch roles');
+                console.error('Failed to fetch roles');
+                return [];
             }
             return await response.json();
         } catch (error) {
@@ -22,7 +23,8 @@ export class RoleService {
         try {
             const response = await fetch(`${this.apiBaseUrl}/roles/${roleId}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch role');
+                console.error('Failed to fetch role');
+                return null;
             }
             return await response.json();
         } catch (error) {

@@ -9,7 +9,8 @@ export class ParticipantService {
         try {
             const response = await fetch(`${this.apiBaseUrl}/participants/`);
             if (!response.ok) {
-                throw new Error('Failed to fetch participants');
+                console.error('Failed to fetch participants');
+                return [];
             }
             return await response.json();
         } catch (error) {
@@ -22,7 +23,8 @@ export class ParticipantService {
         try {
             const response = await fetch(`${this.apiBaseUrl}/participants/${participantId}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch participant');
+                console.error('Failed to fetch participant');
+                return null;
             }
             return await response.json();
         } catch (error) {
