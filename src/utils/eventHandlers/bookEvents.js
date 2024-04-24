@@ -197,3 +197,9 @@ export async function getNonAuthorsForBook(bookId) {
     );
   }
 }
+
+export async function getBooks(bookid = null) {
+  return bookid
+    ? await new BookService(await fetchConfig()).fetchBook(bookid)
+    : await new BookService(await fetchConfig()).fetchBooks();
+}

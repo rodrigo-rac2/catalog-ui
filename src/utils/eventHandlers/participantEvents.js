@@ -1,6 +1,7 @@
 // src/utils/eventHandlers/participantEvents.js
 
 import { toggleElement, displayStatusMessage } from "../helpers/common.js";
+import { fetchConfig } from "../../main.js";
 import { displayParticipants } from "../helpers/participantHelpers.js";
 import { ParticipantService } from "../../api-handlers/participantService.js";
 
@@ -126,3 +127,9 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
       }
     });
 }
+
+export async function getParticipants(participantid = null) {
+  return participantid
+    ? await new ParticipantService(await fetchConfig()).fetchParticipant(participantid)
+    : await new ParticipantService(await fetchConfig()).fetchParticipants();
+} 

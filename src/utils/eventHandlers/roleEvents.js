@@ -1,6 +1,7 @@
 // catalog-ui/src/utils/eventHandlers/rolesEvents.js
 
 import { toggleElement, displayStatusMessage } from "../helpers/common.js";
+import { fetchConfig } from "../../main.js";
 import { displayRoles } from "../helpers/roleHelpers.js";
 import { RoleService } from "../../api-handlers/roleService.js";
 
@@ -35,7 +36,7 @@ export function setupRoleEventHandlers(apiBaseUrl) {
     const { roleId, newDescription } = event.detail;
     try {
       await roleService.updateRole(roleId, {
-        description: newDescription
+        description: newDescription,
       });
       displayStatusMessage("roles", "Role updated successfully", "success");
       const roles = await roleService.fetchRoles();
@@ -108,4 +109,10 @@ export function setupRoleEventHandlers(apiBaseUrl) {
         );
       }
     });
+}
+
+export async function getRoles(roleId = null) {
+  return roleId
+    ? await new RoleService(await fetchConfig()).fetchRole(roleId)
+    : await new RoleService(await fetchConfig()).fetchRoles();
 }

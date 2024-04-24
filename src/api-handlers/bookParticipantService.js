@@ -84,6 +84,31 @@ export class BookParticipantService {
     }
   }
 
+  async updateParticipantRole(bookId, participantId, roleId) {
+    try {
+      const response = await fetch(
+        `${this.apiBaseUrl}/books/${bookId}/participants/${participantId}/role/${roleId}`,
+        { method: "PUT" }
+      );
+      if (!response.ok) {
+        throw new Error(
+          `Failed to update participant's role: ${errorResponse.message}`
+        );
+      }
+      // Only parse JSON if the server actually sends back data
+      if (response.status !== 204) {
+        // 204 No Content
+        const result = await response.json();
+        return result;
+      }
+      return {}; // Return an empty object dor no content
+      return await response.json();
+    } catch (error) {
+      console.error("Error updating participant's role:", error);
+      throw error;
+    }
+  }
+
   async deleteBookParticipant(bookId, participantId) {
     try {
       const response = await fetch(
@@ -101,7 +126,7 @@ export class BookParticipantService {
         const result = await response.json();
         return result;
       }
-      return {}; // Return an empty object or appropriate message for no content
+      return {}; // Return an empty object dor no content
     } catch (error) {
       console.error("Error deleting book participant:", error);
       throw error; // Rethrowing the error to be handled by the caller

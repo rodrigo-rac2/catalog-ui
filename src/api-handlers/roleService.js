@@ -18,6 +18,19 @@ export class RoleService {
         }
     }
 
+    async fetchRole(roleId) {
+        try {
+            const response = await fetch(`${this.apiBaseUrl}/roles/${roleId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch role');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching role:', error);
+            return null;
+        }
+    }
+
     async addRole(roleData) {
         try {
             const response = await fetch(`${this.apiBaseUrl}/roles/`, {
