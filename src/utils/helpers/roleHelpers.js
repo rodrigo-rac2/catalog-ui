@@ -44,8 +44,10 @@ function toggleRoleDetails(role, roleItem) {
     const details = document.createElement("form");
     details.className = roleFormClassName;
     details.innerHTML = `<label>Role details:</label>
-                           <p>ID: <input type="text" value="${role.roleid}" name="id" disabled/>
-                           <br>Description: <input type="text" value="${role.description}" name="name" disabled/></p>
+                           <p>ID: 
+                           <br /><input type="text" value="${role.roleid}" name="id" disabled/>
+                           <br />Description: 
+                           <br /><input type="text" value="${role.description}" name="name" disabled/></p>
                            <button type="button" onclick="this.parentElement.remove();">Close</button>`;
     roleItem.appendChild(details);
   }
@@ -60,8 +62,10 @@ function toggleEditForm(role, roleItem) {
     const form = document.createElement("form");
     form.className = "edit-form";
     form.innerHTML = `<label>Edit role:</label>
-                        <p>ID: <input type="text" value="${role.roleid}" name="id" disabled/>
-                        <br>Description: <input type="text" value="${role.description}" name="description"/></p>
+                        <p>ID: 
+                        <br /><input type="text" value="${role.roleid}" name="id" disabled/>
+                        <br />Description: 
+                        <br /><input type="text" value="${role.description}" name="description"/></p>
                         <button type="submit">Save</button>
                         <button type="button" onclick="this.parentElement.remove();">Cancel</button>`;
     form.onsubmit = (e) =>

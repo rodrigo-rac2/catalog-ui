@@ -55,24 +55,35 @@ This project provides a web-based user interface for interacting with the Book C
 
 <details>
 <summary>Participant Management</summary>
-- **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
-- **View Participants**: Displays a list of all participants.
-- **Update and Delete**: Participants can be updated or removed as required.
 
-![Participant Management](docs/screenshots/ParticipantAdded.png)
+- **View Participants**: Displays a list of all participants.
+![Participant Details](docs/screenshots/ParticipantDetails.png)
+![Participant List](docs/screenshots/ParticipantList.png)
+
+- **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
+![Create Participant](docs/screenshots/ParticipantCreate.png)
+
+- **Update and Delete**: Participants can be updated or removed as required.
+![Update Participant](docs/screenshots/ParticipantEdit.png)
 
 </details>
 
 <details>
 <summary>Role Management</summary>
->
-- **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
-- **View Roles**: All roles can be viewed, updated, or deleted from a simple interface.
 
-![Role Management](docs/screenshots/RoleDetails.png)
+- **View Roles**: All roles can be viewed, updated, or deleted from a simple interface.
+![Role Details](docs/screenshots/RoleDetails.png)
+![Role List](docs/screenshots/RoleList.png)
+
+- **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
+![Create Role](docs/screenshots/RoleCreate.png)
+
+- **Update and Delete**: Roles can be updated or removed as needed.
+![Update Role](docs/screenshots/RoleEdit.png)
+
 </details>
 
-<details><summary>>Book Participants</summary>
+<details><summary>Book Participants</summary>
 
 - **View Assignments**: Review all participant assignments for a book within the catalog.
 ![Book Participant Management](docs/screenshots/BookParticipantsList.png)
