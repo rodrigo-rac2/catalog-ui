@@ -36,7 +36,7 @@ This project provides a web-based user interface for interacting with the Book C
 
 <details>
 <summary>Book Management</summary>
-#### Book Management
+
 - **Add New Books**: Users can add new books to the catalog, specifying details such as title, ISBN, and description.
 
 ![Add Books](docs/screenshots/BookCreate.png)
@@ -53,28 +53,42 @@ This project provides a web-based user interface for interacting with the Book C
 
 </details>
 
-#### Participant Management
+<details>
+<summary>Participant Management</summary>
 - **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
 - **View Participants**: Displays a list of all participants.
 - **Update and Delete**: Participants can be updated or removed as required.
 
 ![Participant Management](docs/screenshots/ParticipantAdded.png)
 
-#### Role Management
+</details>
+
+<details>
+<summary>Role Management</summary>
+>
 - **Define Roles**: Users can define roles associated with the book publishing process, such as author, translator, and editor.
 - **View Roles**: All roles can be viewed, updated, or deleted from a simple interface.
 
 ![Role Management](docs/screenshots/RoleDetails.png)
+</details>
 
-#### Book Participants
-- **View Assignments**: Review all participant assignments for books within the catalog.
+<details><summary>>Book Participants</summary>
+
+- **View Assignments**: Review all participant assignments for a book within the catalog.
 ![Book Participant Management](docs/screenshots/BookParticipantsList.png)
 
 - **Assign Participants to Books**: Assign roles to participants for each book, for example, assigning an author or editor to a book.
-![Book Participant Management](docs/screenshots/BookParticipantsPreAdd.png)
+![Add Book Participant](docs/screenshots/BookParticipantCreate.png)
 
-- **View Updated Assignments**: After assigning participants to books, the updated assignments are displayed in the list.
-![Book Participant Management](docs/screenshots/BookParticipantAdded.png)
+**Update and Delete**: Assignments can be updated or removed as needed.
+
+![Book Participant Edit](docs/screenshots/BookParticipantEdit.png)
+
+![Book Participant Delete](docs/screenshots/BookParticipantDelete.png)
+
+- **View Updated Assignments**: After assigning participants to books or updating their roles, the updated assignments are displayed in the list.
+
+</details>
 
 #### Dynamic Configuration
 - **API Integration**: The system dynamically fetches and updates its configuration from a central API, ensuring all components are always in sync.
