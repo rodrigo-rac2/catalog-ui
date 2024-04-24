@@ -184,7 +184,7 @@ async function getNonAuthorsListText(book) {
   }
 
   if (participantList.length === 1) {
-    return participantList[0].book.name;
+    return `${participantList[0].participant.name} (${participantList[0].role.description})`;
   }
 
   let participantListText = participantList
