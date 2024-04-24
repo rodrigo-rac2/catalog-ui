@@ -34,12 +34,24 @@ This project provides a web-based user interface for interacting with the Book C
 
 ### Features
 
+<details>
+<summary>Book Management</summary>
 #### Book Management
 - **Add New Books**: Users can add new books to the catalog, specifying details such as title, ISBN, and description.
+
+![Add Books](docs/screenshots/BookCreate.png)
+
 - **View Books**: Users can view a list of all books currently stored in the catalog.
+
+![Book List](docs/screenshots/BookList.png)
+
 - **Update and Delete**: Each book can be updated or deleted directly from the list.
 
-![Book Managemnet](docs/screenshots/BookList.png)
+![Update Book](docs/screenshots/BookEdit.png)
+
+![Book Details](docs/screenshots/BookDetails.png)
+
+</details>
 
 #### Participant Management
 - **Add New Participants**: Allows addition of participants who can be associated with books, such as authors, editors, etc.
