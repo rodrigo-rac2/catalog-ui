@@ -1,6 +1,5 @@
 import { toggleElement, displayStatusMessage } from "../helpers/common.js";
 import { displayBooks } from "../helpers/bookHelpers.js";
-import { loadBooksSelect } from "./bookEvents.js";
 import { fetchConfig } from "../../main.js";
 import { BookService } from "../../api-handlers/bookService.js";
 import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
