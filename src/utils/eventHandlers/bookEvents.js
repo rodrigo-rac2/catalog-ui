@@ -1,4 +1,5 @@
 import { toggleElement, displayStatusMessage } from "../helpers/common.js";
+import { loadBooksSelect } from "../helpers/bookParticipantHelpers.js";
 import { displayBooks } from "../helpers/bookHelpers.js";
 import { fetchConfig } from "../../main.js";
 import { BookService } from "../../api-handlers/bookService.js";
@@ -57,6 +58,7 @@ export async function setupBookEventHandlers(apiBaseUrl) {
       displayStatusMessage("books", "Book updated successfully", "success");
       const books = await bookService.fetchBooks();
       displayBooks(books, apiBaseUrl);
+      loadBooksSelect();
     } catch (error) {
       console.error("Error updating book:", error);
       displayStatusMessage(
@@ -78,6 +80,7 @@ export async function setupBookEventHandlers(apiBaseUrl) {
           await bookService.deleteBook(bookId);
           target.closest(".book-item").remove();
           displayStatusMessage("books", "Book deleted successfully", "success");
+          loadBooksSelect();
         } catch (error) {
           console.error("Error deleting book:", error);
           displayStatusMessage(
@@ -122,6 +125,7 @@ export async function setupBookEventHandlers(apiBaseUrl) {
           );
           const books = await bookService.fetchBooks();
           displayBooks(books, apiBaseUrl);
+          loadBooksSelect();
           form.reset();
           delete form.dataset.bookId;
           toggleElement("book-form-container"); // Optionally close the form
