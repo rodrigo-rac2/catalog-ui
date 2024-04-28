@@ -6,6 +6,7 @@ import { displayRoles } from "../helpers/roleHelpers.js";
 import { RoleService } from "../../api-handlers/roleService.js";
 
 export function setupRoleEventHandlers(apiBaseUrl) {
+  let lastSearchTerm = ""; // Variable to store the last search term
   const roleService = new RoleService(apiBaseUrl);
 
   document
@@ -14,13 +15,30 @@ export function setupRoleEventHandlers(apiBaseUrl) {
 
   document.getElementById("loadRoles").addEventListener("click", async () => {
     const rolesList = document.getElementById("roles-list");
-    if (rolesList.style.display === "block") {
-      rolesList.style.display = "none";
+    const searchTerm = document.getElementById("roleSearchFilter").value;
+
+    // Check if the current search term is different from the last search term
+    if (searchTerm !== lastSearchTerm) {
+      lastSearchTerm = searchTerm; // Update the last search term
+      rolesList.style.display = "block"; // Always display the roles list when search term changes
     } else {
+      // Toggle display only if the search term has not changed
+      rolesList.style.display =
+        rolesList.style.display === "block" ? "none" : "block";
+    }
+
+    if (rolesList.style.display === "block") {
       try {
-        const roles = await roleService.fetchRoles();
-        displayRoles(roles, apiBaseUrl);
-        rolesList.style.display = "block";
+        const roles = searchTerm
+          ? await roleService.fetchRoles({ description: searchTerm })
+          : await roleService.fetchRoles();
+
+        if (roles.length === 0) {
+            console.log("No roles found: update search field");
+            displayStatusMessage("roles", "No roles found: update search field", "error");
+        } else {
+            displayRoles(roles);
+        }
       } catch (error) {
         console.error("Error loading roles:", error);
         displayStatusMessage(
@@ -28,6 +46,7 @@ export function setupRoleEventHandlers(apiBaseUrl) {
           `Failed to load roles: ${error.message}`,
           "error"
         );
+        rolesList.style.display = "none";  // Hide the list if there's an error
       }
     }
   });
@@ -39,7 +58,20 @@ export function setupRoleEventHandlers(apiBaseUrl) {
         description: newDescription,
       });
       displayStatusMessage("roles", "Role updated successfully", "success");
-      const roles = await roleService.fetchRoles();
+      const searchTerm = document.getElementById("roleSearchFilter").value;
+
+      const roles = searchTerm
+        ? await roleService.fetchRoles({ description: searchTerm })
+        : await roleService.fetchRoles();
+
+      if (roles.length === 0) {
+        console.log("No roles found: update the search field");
+        displayStatusMessage(
+          "roles",
+          "No roles found: update the search field",
+          "error"
+        );
+      }
       displayRoles(roles, apiBaseUrl);
     } catch (error) {
       console.error("Error updating role:", error);

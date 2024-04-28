@@ -1,3 +1,5 @@
+// bookEvents.js
+
 import { toggleElement, displayStatusMessage } from "../helpers/common.js";
 import { loadBooksSelect } from "../helpers/bookParticipantHelpers.js";
 import { displayBooks } from "../helpers/bookHelpers.js";
@@ -6,6 +8,7 @@ import { BookService } from "../../api-handlers/bookService.js";
 import { BookParticipantService } from "../../api-handlers/bookParticipantService.js";
 
 export async function setupBookEventHandlers(apiBaseUrl) {
+  let lastSearchTerm = ""; // Variable to store the last search term
   const bookService = new BookService(apiBaseUrl);
 
   document
@@ -14,13 +17,35 @@ export async function setupBookEventHandlers(apiBaseUrl) {
 
   document.getElementById("loadBooks").addEventListener("click", async () => {
     const booksList = document.getElementById("books-list");
-    if (booksList.style.display === "block") {
-      booksList.style.display = "none";
+    const searchTerm = document.getElementById("bookSearchFilter").value;
+
+    // Check if the current search term is different from the last search term
+    if (searchTerm !== lastSearchTerm) {
+      lastSearchTerm = searchTerm; // Update the last search term
+      booksList.style.display = "block"; // Always display the books list when search term changes
     } else {
+      // Toggle display only if the search term has not changed
+      booksList.style.display =
+        booksList.style.display === "block" ? "none" : "block";
+    }
+
+    // Fetch and display books only if the list is supposed to be visible
+    if (booksList.style.display === "block") {
       try {
-        const books = await bookService.fetchBooks();
-        displayBooks(books, apiBaseUrl);
-        booksList.style.display = "block";
+        const books = searchTerm
+          ? await bookService.fetchBooks({ search: searchTerm })
+          : await bookService.fetchBooks();
+
+        if (books.length === 0) {
+          console.log("No books found: update the search field");
+          displayStatusMessage(
+            "books",
+            "No books found: update the search field",
+            "error"
+          );
+        } else {
+          displayBooks(books);
+        }
       } catch (error) {
         console.error("Error loading books:", error);
         displayStatusMessage(
@@ -28,6 +53,7 @@ export async function setupBookEventHandlers(apiBaseUrl) {
           `Failed to load books: ${error.message}`,
           "error"
         );
+        booksList.style.display = "none"; // Hide the list if there's an error
       }
     }
   });
@@ -56,7 +82,20 @@ export async function setupBookEventHandlers(apiBaseUrl) {
         isbn: newIsbn,
       });
       displayStatusMessage("books", "Book updated successfully", "success");
-      const books = await bookService.fetchBooks();
+      const searchTerm = document.getElementById("bookSearchFilter").value;
+
+      const books = searchTerm
+        ? await bookService.fetchBooks({ search: searchTerm })
+        : await bookService.fetchBooks();
+
+      if (books.length === 0) {
+        console.log("No books found: update the search field");
+        displayStatusMessage(
+          "books",
+          "No books found: update the search field",
+          "error"
+        );
+      }
       displayBooks(books, apiBaseUrl);
       loadBooksSelect();
     } catch (error) {
@@ -67,7 +106,6 @@ export async function setupBookEventHandlers(apiBaseUrl) {
         "error"
       );
     }
-    
   });
 
   document
@@ -178,21 +216,22 @@ export async function getNonAuthorsForBook(bookId) {
     const nonAuthors = await new BookParticipantService(
       await fetchConfig()
     ).fetchBookParticipantsWithoutRole(bookId, 1);
-    if (!nonAuthors) {
+    if (nonAuthors.length === 0) {
       console.log(
         `No non-authors found for book ${bookId} (this is ok)`,
         "success"
       );
       return [];
-    }
-    console.log(
-      `Non-authors for book ${bookId}: ${nonAuthors.map(
-        (nonAuthor) => nonAuthor.participant.name
-      )}`,
-      "success"
-    );
+    } else {
+      console.log(
+        `Non-authors for book ${bookId}: ${nonAuthors.map(
+          (nonAuthor) => nonAuthor.participant.name
+        )}`,
+        "success"
+      );
 
-    return nonAuthors;
+      return nonAuthors;
+    }
   } catch (error) {
     console.error("Error getting non-authors for book:", error);
     displayStatusMessage(

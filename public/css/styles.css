@@ -47,6 +47,13 @@ select {
   margin-bottom: 5px;
 }
 
+.search-input {
+  height: 22px;
+  line-height: 22px;
+  width: 75% !important;
+  margin-bottom: 5px;
+}
+
 form label {
   display: block;
   margin-top: 10px;
