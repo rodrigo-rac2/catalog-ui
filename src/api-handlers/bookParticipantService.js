@@ -52,10 +52,10 @@ export class BookParticipantService {
         );
         return [];
       }
-      return await response.json();
+      return response ? await response.json() : [];
     } catch (error) {
       console.error("Error fetching participants:", error);
-      throw error;
+      return [];
     }
   }
 

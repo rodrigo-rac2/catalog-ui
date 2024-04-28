@@ -6,6 +6,7 @@ import { displayParticipants } from "../helpers/participantHelpers.js";
 import { ParticipantService } from "../../api-handlers/participantService.js";
 
 export function setupParticipantEventHandlers(apiBaseUrl) {
+  let lastSearchTerm = ""; // Variable to store the last search term
   const participantService = new ParticipantService(apiBaseUrl);
 
   document
@@ -18,13 +19,32 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
     .getElementById("loadParticipants")
     .addEventListener("click", async () => {
       const participantsList = document.getElementById("participants-list");
-      if (participantsList.style.display === "block") {
-        participantsList.style.display = "none";
+      const searchTerm = document.getElementById(
+        "participantSearchFilter"
+      ).value;
+
+      // Check if the current search term is different from the last search term
+      if (searchTerm !== lastSearchTerm) {
+        lastSearchTerm = searchTerm; // Update the last search term
+        participantsList.style.display = "block"; // Always display the participants list when search term changes
       } else {
+        // Toggle display only if the search term has not changed
+        participantsList.style.display =
+          participantsList.style.display === "block" ? "none" : "block";
+      }
+
+      if (participantsList.style.display === "block") {
         try {
-          const participants = await participantService.fetchParticipants();
-          displayParticipants(participants, apiBaseUrl);
-          participantsList.style.display = "block";
+          const participants = searchTerm 
+          ? await participantService.fetchParticipants({ name: searchTerm })
+          : await participantService.fetchParticipants();
+
+          if (participants.length === 0) {
+            console.log("No participants found: update search field");
+            displayStatusMessage("participants", "No participants found: update search field", "error");
+          } else {
+            displayParticipants(participants);
+          }
         } catch (error) {
           console.error("Error loading participants:", error);
           displayStatusMessage(
@@ -32,6 +52,8 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
             `Failed to load participants: ${error.message}`,
             "error"
           );
+          participantsList.style.display = "none"; // Hide the list if there's an error
+
         }
       }
     });
@@ -47,7 +69,21 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
         "Participant updated successfully",
         "success"
       );
-      const participants = await participantService.fetchParticipants();
+      const searchTerm = document.getElementById("participantSearchFilter").value;
+
+      const participants = searchTerm
+      ? await participantService.fetchParticipants({ name: searchTerm })
+      : await participantService.fetchParticipants();
+
+      if (participants.length === 0) {
+        console.log("No participants found: update the search field");
+        displayStatusMessage(
+          "participants",
+          "No participants found: update the search field",
+          "error"
+        );
+      }
+
       displayParticipants(participants, apiBaseUrl);
     } catch (error) {
       console.error("Error updating participant:", error);
@@ -130,6 +166,8 @@ export function setupParticipantEventHandlers(apiBaseUrl) {
 
 export async function getParticipants(participantid = null) {
   return participantid
-    ? await new ParticipantService(await fetchConfig()).fetchParticipant(participantid)
+    ? await new ParticipantService(await fetchConfig()).fetchParticipant(
+        participantid
+      )
     : await new ParticipantService(await fetchConfig()).fetchParticipants();
-} 
+}

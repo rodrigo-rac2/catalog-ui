@@ -179,7 +179,7 @@ async function getNonAuthorsListText(book) {
   // Fetch authors asynchronously
   const participantList = await getNonAuthorsForBook(book.bookid, 1);
 
-  if (participantList.length === 0) {
+  if (!participantList || participantList.length === 0) {
     return;
   }
 

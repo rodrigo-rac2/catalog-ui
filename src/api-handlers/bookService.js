@@ -5,12 +5,17 @@ export class BookService {
     this.apiBaseUrl = apiBaseUrl;
   }
 
-  async fetchBooks() {
+  async fetchBooks(searchParams = null) {
+    const url = new URL(`${this.apiBaseUrl}/books/`);
+    if (searchParams) {
+      url.searchParams.append('search', searchParams.search);  // Assume the API expects a query parameter named 'search'
+    }
+
     try {
-      const response = await fetch(`${this.apiBaseUrl}/books/`);
+      const response = await fetch(url);
       if (!response.ok) {
         console.error("Failed to fetch books");
-        return []
+        return [];
       }
       return await response.json();
     } catch (error) {
@@ -62,8 +67,7 @@ export class BookService {
             const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
             throw new Error(`Failed to update book: ${errorResponse.message}`);
         }
-        console.log('response:', response);
-        return await response.json();
+        return response.status;
     } catch (error) {
         console.error('Error updating book:', error);
         return null;

@@ -5,9 +5,13 @@ export class ParticipantService {
         this.apiBaseUrl = apiBaseUrl;
     }
 
-    async fetchParticipants() {
+    async fetchParticipants(searchParams = null) {
+        const url = new URL(`${this.apiBaseUrl}/participants/`);
+        if (searchParams) {
+            url.searchParams.append('name', searchParams.name); // Assume the API expects a query parameter named 'name'
+        }
         try {
-            const response = await fetch(`${this.apiBaseUrl}/participants/`);
+            const response = await fetch(url);
             if (!response.ok) {
                 console.error('Failed to fetch participants');
                 return [];
@@ -62,7 +66,7 @@ export class ParticipantService {
                 const errorResponse = await response.json(); // Assuming the server sends back a JSON with error details
                 throw new Error(`Failed to update participant: ${errorResponse.message}`);
             }
-            return await response.json();
+            return response.status;
         } catch (error) {
             console.error('Error updating participant:', error);
             return null;
